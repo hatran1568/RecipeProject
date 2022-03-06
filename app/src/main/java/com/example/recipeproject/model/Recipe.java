@@ -14,6 +14,15 @@ public class Recipe {
     private String thumbnail;
     private int userID;
     private Date date;
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Date getDate() {
         return date;
@@ -110,6 +119,19 @@ public class Recipe {
                 ", ingredients=" + ingredients +
                 ", thumbnail='" + thumbnail + '\'' +
                 ", userID=" + userID +
+                "date=" + getDate().toString()+
                 '}';
+    }
+    public void cloneRecipe(Recipe r){
+        setId(r.getId());
+        setDescription(r.getDescription());
+        setDate(r.getDate());
+        setDuration(r.getDuration());
+        setName(r.getName());
+        setIngredients(r.getIngredients());
+        setPortion(r.getPortion());
+        setSteps(r.getSteps());
+        setThumbnail(r.getThumbnail());
+        setUserID(r.getUserID());
     }
 }
