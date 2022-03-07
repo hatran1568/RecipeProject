@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.FirebaseCallback;
 import com.example.recipeproject.Repsentation.Adapter;
+import com.example.recipeproject.listener.SelectListener;
 import com.example.recipeproject.model.Recipe;
 import com.example.recipeproject.model.User;
 import com.squareup.picasso.Picasso;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 
 import javax.xml.transform.Source;
 
-public class HomePage extends AppCompatActivity {
+public class HomePage extends AppCompatActivity implements SelectListener {
     private Context mContext;
     private Activity mActivity;
     RecyclerView recyclerView;
@@ -48,7 +49,6 @@ public class HomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.activity_home_page);
 
         mActivity = HomePage.this;
@@ -69,7 +69,7 @@ public class HomePage extends AppCompatActivity {
                 // calling constructor of adapter
                 // with source list as a parameter
 
-                adapter = new Adapter(recipes,mContext,mActivity);
+                adapter = new Adapter(recipes,mContext,mActivity,HomePage.this);
                 // Set Horizontal Layout Manager
                 // for Recycler view
                 HorizontalLayout
@@ -90,4 +90,8 @@ public class HomePage extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemClick(Recipe recipe) {
+
+    }
 }
