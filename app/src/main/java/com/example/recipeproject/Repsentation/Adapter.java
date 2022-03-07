@@ -80,7 +80,7 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
        holder.recipeName.setText(recipe.getName());
         DataAccess.getUserById(new getUserCallback() {
             @Override
-            public void onRespondse(User user) {
+            public void onResponse(User user) {
                 holder.userName.setText(user.getName());
             }
         },recipe.getUserID());
