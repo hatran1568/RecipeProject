@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         recipe.setPortion(portion);
         String thumbnail = snapshot.child("thumbnail").getValue().toString();
         recipe.setThumbnail(thumbnail);
-        int userId = Integer.parseInt(snapshot.child("userId").getValue().toString());
+        String userId = snapshot.child("userId").getValue().toString();
         recipe.setUserID(userId);
         int id = Integer.parseInt(snapshot.child("id").getValue().toString());
         recipe.setId(id);

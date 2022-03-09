@@ -3,7 +3,7 @@ package com.example.recipeproject.model;
 import java.util.ArrayList;
 
 public class User {
-    private int id;
+    private String id;
     private String email;
     private String name;
     private String image_link;
@@ -22,11 +22,11 @@ public class User {
 
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

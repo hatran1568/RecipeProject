@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +29,7 @@ public class RegisterActivity extends AbstractActivity {
     TextView editTextPassword;
     TextView editTextName;
     TextView editTextPasswordReenter;
-
+    ProgressBar progressBar;
     Button btnRegister;
 
     @Override
@@ -41,6 +42,9 @@ public class RegisterActivity extends AbstractActivity {
         editTextName = findViewById(R.id.editTextName);
         editTextPasswordReenter = findViewById(R.id.editTextPasswordReenter);
         btnRegister = findViewById(R.id.btnRegister);
+        progressBar = findViewById(R.id.progressBarRegister);
+
+        progressBar.setVisibility(View.INVISIBLE);
 
         // Register logic
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +80,7 @@ public class RegisterActivity extends AbstractActivity {
                     return;
                 }
 
+                progressBar.setVisibility(View.VISIBLE);
                 // Actual register logic
                 firebaseAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -83,6 +88,7 @@ public class RegisterActivity extends AbstractActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
                             User user = new User();
+                            user.setId(task.getResult().getUser().getUid());
                             user.setEmail(email);
                             user.setName(name);
                             user.setPassword(password);
@@ -96,15 +102,19 @@ public class RegisterActivity extends AbstractActivity {
                                     if (task.isSuccessful()){
                                         Toast.makeText(view.getContext(), "User has been registered successfully!", Toast.LENGTH_LONG).show();
 
+                                        progressBar.setVisibility(View.VISIBLE);
+
                                         // Redirect to login screen
                                         startActivity(new Intent(view.getContext(), LoginActivity.class));
                                     } else {
                                         Toast.makeText(view.getContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                        progressBar.setVisibility(View.GONE);
                                     }
                                 }
                             });
                         } else {
                             Toast.makeText(view.getContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.GONE);
                         }
                     }
                 });

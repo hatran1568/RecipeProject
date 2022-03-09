@@ -42,7 +42,7 @@ public class DataAccess {
                     recipe.setPortion(portion);
                     String thumbnail = snapshot.child("thumbnail").getValue().toString();
                     recipe.setThumbnail(thumbnail);
-                    int userId = Integer.parseInt(snapshot.child("userId").getValue().toString());
+                    String userId = snapshot.child("userId").getValue().toString();
                     recipe.setUserID(userId);
 
 
@@ -80,8 +80,8 @@ public class DataAccess {
         });
     }
 
-    public static void getUserById(getUserCallback callback, int id){
-        double uid = id;
+    public static void getUserById(getUserCallback callback, String id){
+        String uid = id;
         User user = new User();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference userRef = database.getReference("user");
@@ -97,58 +97,6 @@ public class DataAccess {
                 user.setPassword(password);
                 callback.onResponse(user);
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -193,7 +141,7 @@ public class DataAccess {
                     recipe.setPortion(portion);
                     String thumbnail = snapshot.child("thumbnail").getValue().toString();
                     recipe.setThumbnail(thumbnail);
-                    int userId = Integer.parseInt(snapshot.child("userId").getValue().toString());
+                    String userId = snapshot.child("userId").getValue().toString();
                     recipe.setUserID(userId);
                     int id = Integer.parseInt(snapshot.child("id").getValue().toString());
                     recipe.setId(id);
@@ -246,7 +194,7 @@ public class DataAccess {
                         recipe.setPortion(portion);
                         String thumbnail = snapshot.child("thumbnail").getValue().toString();
                         recipe.setThumbnail(thumbnail);
-                        int userId = Integer.parseInt(snapshot.child("userId").getValue().toString());
+                        String userId = snapshot.child("userId").getValue().toString();
                         recipe.setUserID(userId);
                         int id = Integer.parseInt(snapshot.child("id").getValue().toString());
                         recipe.setId(id);

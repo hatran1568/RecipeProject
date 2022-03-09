@@ -12,7 +12,7 @@ public class Recipe {
     private ArrayList<Step> steps;
     private ArrayList<String> ingredients;
     private String thumbnail;
-    private int userID;
+    private String userID;
     private Date date;
     private User user;
 
@@ -99,11 +99,11 @@ public class Recipe {
         this.thumbnail = thumbnail;
     }
 
-    public int getUserID() {
+    public String getUserID() {
         return userID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 
