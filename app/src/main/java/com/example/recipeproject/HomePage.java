@@ -18,13 +18,15 @@ import com.example.recipeproject.Repsentation.Adapter;
 import com.example.recipeproject.listener.SelectListener;
 import com.example.recipeproject.model.Recipe;
 import com.example.recipeproject.model.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import javax.xml.transform.Source;
 
-public class HomePage extends AppCompatActivity implements SelectListener {
+public class HomePage extends AbstractActivity implements SelectListener {
     private Context mContext;
     private Activity mActivity;
     RecyclerView recyclerView;

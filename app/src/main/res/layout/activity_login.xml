@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.MaterialComponents.Bridge">
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="0dp"
-        android:layout_height="196dp"
+        android:layout_height="166dp"
         android:background="#E91E63"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,14 +30,16 @@
             android:id="@+id/editTextEmail"
             android:layout_width="341dp"
             android:layout_height="56dp"
-            android:layout_marginTop="84dp"
+            android:layout_marginTop="36dp"
             android:background="@drawable/edit_text_bg"
             android:ems="10"
+            android:textColor="#808080"
             android:hint="Email"
+            android:textColorHint="#B0B0B0"
             android:inputType="textEmailAddress"
             android:paddingLeft="20dp"
             app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
-            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/editTextPassword"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,14 +51,15 @@
             android:background="@drawable/edit_text_bg"
             android:ems="10"
             android:hint="Password"
+            android:textColor="#808080"
+            android:textColorHint="#B0B0B0"
             android:inputType="textPassword"
             android:paddingLeft="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
-            app:layout_constraintVertical_bias="0.041" />
+            app:layout_constraintVertical_bias="0.035" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogin"
@@ -69,10 +72,10 @@
             app:cornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.51"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
-            app:layout_constraintVertical_bias="0.444"
+            app:layout_constraintVertical_bias="0.378"
             tools:ignore="TextContrastCheck" />
 
         <TextView
@@ -101,7 +104,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+            app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+            app:layout_constraintVertical_bias="0.342" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

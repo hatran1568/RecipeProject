@@ -1,0 +1,26 @@
+package com.example.recipeproject;
+
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+public abstract class AbstractActivity extends AppCompatActivity {
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
+    boolean isLoggedIn = false;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+        if (firebaseUser != null){
+            isLoggedIn = true;
+        }
+    }
+}
