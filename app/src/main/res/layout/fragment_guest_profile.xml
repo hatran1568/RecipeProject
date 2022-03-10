@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/guest_profile_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GuestProfileFragment"
+    android:theme="@style/Theme.MaterialComponents.Bridge">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_login_guest_profile"
+        android:layout_width="127dp"
+        android:layout_height="65dp"
+        android:background="@drawable/button_bg"
+        android:backgroundTint="#FF4081"
+        android:text="Login"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:backgroundTint="#FF4081"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.525"
+        tools:ignore="TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login to use full feature"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.359" />
+</androidx.constraintlayout.widget.ConstraintLayout>

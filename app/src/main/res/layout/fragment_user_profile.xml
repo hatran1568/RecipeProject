@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/userProfileLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserProfileFragment">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/userAvatar"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.048"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userAvatar"
+        app:layout_constraintVertical_bias="0.023">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/favoritesTab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Favorites" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/myRecipesTab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My recipes" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <ImageButton
+        android:id="@+id/btnPopupProfile"
+        android:layout_width="31dp"
+        android:layout_height="43dp"
+        android:background="@android:color/transparent"
+        android:onClick="showPopup"
+        android:src="@drawable/ic_baseline_more_vert_24"
+        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/userAvatar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.225" />
+
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.102"
+        app:layout_constraintStart_toEndOf="@+id/userAvatar"
+        app:layout_constraintTop_toTopOf="@+id/userAvatar"
+        app:layout_constraintVertical_bias="0.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>

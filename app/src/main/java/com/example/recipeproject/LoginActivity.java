@@ -37,6 +37,12 @@ public class LoginActivity extends AbstractActivity {
         textViewRegister = findViewById(R.id.textRegister);
         progressBar = findViewById(R.id.progressBarLogin);
 
+        /*if(isLoggedIn){
+            Intent intent = new Intent(this, HomePage.class);
+            startActivity(intent);
+            finish();
+        }*/
+
         progressBar.setVisibility(View.INVISIBLE);
 
         // Open register when clicking on text view
@@ -69,7 +75,9 @@ public class LoginActivity extends AbstractActivity {
                                     if (task.isSuccessful()){
                                         firebaseUser = firebaseAuth.getCurrentUser();
                                         progressBar.setVisibility(View.VISIBLE);
-                                        startActivity(new Intent(view.getContext(), HomePage.class));
+                                        Intent intent = new Intent(view.getContext(), HomeActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                     } else {
                                         Toast.makeText(view.getContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                         progressBar.setVisibility(View.GONE);
