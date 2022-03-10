@@ -1,6 +1,5 @@
-package com.example.recipeproject;
+package com.example.recipeproject.UI.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,23 +7,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.FirebaseCallback;
+import com.example.recipeproject.R;
 import com.example.recipeproject.Repsentation.Adapter;
 import com.example.recipeproject.listener.SelectListener;
 import com.example.recipeproject.model.Recipe;
-import com.example.recipeproject.model.User;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
-import javax.xml.transform.Source;
 
 public class HomePage extends AbstractActivity implements SelectListener {
     private Context mContext;

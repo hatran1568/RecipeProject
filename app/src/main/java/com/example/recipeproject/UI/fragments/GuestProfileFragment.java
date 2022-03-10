@@ -1,4 +1,4 @@
-package com.example.recipeproject;
+package com.example.recipeproject.UI.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.example.recipeproject.UI.activities.LoginActivity;
+import com.example.recipeproject.R;
 
 /**
  * A simple {@link Fragment} subclass.

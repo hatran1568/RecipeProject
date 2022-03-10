@@ -1,4 +1,4 @@
-package com.example.recipeproject;
+package com.example.recipeproject.UI.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.FirebaseCallback;
+import com.example.recipeproject.R;
 import com.example.recipeproject.model.Recipe;
 import com.example.recipeproject.model.Step;
 import com.example.recipeproject.model.User;

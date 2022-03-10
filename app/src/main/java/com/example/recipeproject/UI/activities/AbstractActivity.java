@@ -1,4 +1,4 @@
-package com.example.recipeproject;
+package com.example.recipeproject.UI.activities;
 
 import android.os.Bundle;
 

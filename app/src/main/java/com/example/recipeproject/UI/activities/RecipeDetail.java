@@ -1,8 +1,10 @@
-package com.example.recipeproject;
+package com.example.recipeproject.UI.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.recipeproject.R;
 
 public class RecipeDetail extends AppCompatActivity {
 
