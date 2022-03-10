@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 
 
 import com.example.recipeproject.DataAccess.DataAccess;
-import com.example.recipeproject.HomePage;
 import com.example.recipeproject.InterfaceGetData.getUserCallback;
 import com.example.recipeproject.R;
 import com.example.recipeproject.listener.SelectListener;
@@ -23,7 +22,7 @@ import com.example.recipeproject.model.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
+
 public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
     private ArrayList<Recipe> list;
     private Context mContext;
