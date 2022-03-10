@@ -38,13 +38,13 @@
             android:paddingLeft="20dp"
             android:textColor="#808080"
             android:textColorHint="#B0B0B0"
-            app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
+            app:layout_constraintEnd_toEndOf="@+id/editTextEmailChangePassword"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/editTextPassword"
+            app:layout_constraintStart_toStartOf="@+id/editTextEmailChangePassword"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editTextPassword"
+            android:id="@+id/editTextEmailChangePassword"
             android:layout_width="341dp"
             android:layout_height="56dp"
             android:layout_marginTop="24dp"
@@ -74,7 +74,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.51"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
+            app:layout_constraintTop_toBottomOf="@+id/editTextEmailChangePassword"
             app:layout_constraintVertical_bias="0.378"
             tools:ignore="TextContrastCheck" />
 
@@ -91,7 +91,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.857"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
+            app:layout_constraintTop_toBottomOf="@+id/editTextEmailChangePassword"
             app:layout_constraintVertical_bias="0.131" />
 
         <TextView

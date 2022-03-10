@@ -34,11 +34,11 @@ public class RegisterActivity extends AbstractActivity {
         setContentView(R.layout.activity_register);
 
         editTextEmail = findViewById(R.id.editTextEmail);
-        editTextPassword = findViewById(R.id.editTextPassword);
+        editTextPassword = findViewById(R.id.editTextEmailChangePassword);
         editTextName = findViewById(R.id.editTextName);
         editTextPasswordReenter = findViewById(R.id.editTextPasswordReenter);
-        btnRegister = findViewById(R.id.btnRegister);
-        progressBar = findViewById(R.id.progressBarRegister);
+        btnRegister = findViewById(R.id.btnResetPassword);
+        progressBar = findViewById(R.id.progressBarResetPwd);
 
         progressBar.setVisibility(View.INVISIBLE);
 
