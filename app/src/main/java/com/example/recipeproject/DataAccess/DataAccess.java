@@ -95,6 +95,11 @@ public class DataAccess {
                 String password = snapshot.child("password").getValue().toString();
                 user.setId(id);
                 user.setPassword(password);
+                String imageUri = null;
+                if(snapshot.child("image_link").getValue() != null){
+                    imageUri = snapshot.child("image_link").getValue().toString();
+                };
+                user.setImage_link(imageUri);
                 callback.onResponse(user);
             }
 

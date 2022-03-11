@@ -3,7 +3,9 @@ package com.example.recipeproject.UI.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -65,6 +67,7 @@ public class ChangePasswordActivity extends AbstractActivity {
                 if (task.isSuccessful()){
                     progressBar.setVisibility(View.INVISIBLE);
                     Toast.makeText(ChangePasswordActivity.this, "Check your email to reset your password!", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(ChangePasswordActivity.this, LoginActivity.class));
                 } else {
                     Toast.makeText(ChangePasswordActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
