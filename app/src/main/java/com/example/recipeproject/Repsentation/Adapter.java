@@ -39,11 +39,11 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
         Context context;
         public  MyView(View view){
             super(view);
-           userName= view.findViewById(R.id.userName);
-           recipeName = view.findViewById(R.id.recipeName);
-           recipeImg = view.findViewById(R.id.recipeImg);
-           recipeDescription = view.findViewById(R.id.description);
-           card = view.findViewById(R.id.cardView);
+           userName= view.findViewById(R.id.userName1);
+           recipeName = view.findViewById(R.id.recipeName1);
+           recipeImg = view.findViewById(R.id.recipeImg1);
+           recipeDescription = view.findViewById(R.id.description1);
+           card = view.findViewById(R.id.card1);
         }
 
 
@@ -63,7 +63,7 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
         View itemView
                 = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.layout_listitem,
+                .inflate(R.layout.layout_cardview,
                         parent,
                         false);
 

@@ -4,41 +4,29 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android/RecipeProject/app/src/main/res/layout/activity_main.xml" value="0.1598731884057971" />
+        <entry key="..\:/College/S7_Spring'22/Mobile Programming (PRM392)/project/Recipe/app/src/main/res/layout/activity_home.xml" value="0.23052536231884058" />
+        <entry key="..\:/College/S7_Spring'22/Mobile Programming (PRM392)/project/Recipe/app/src/main/res/layout/activity_home_page.xml" value="0.23052536231884058" />
+        <entry key="..\:/College/S7_Spring'22/Mobile Programming (PRM392)/project/Recipe/app/src/main/res/layout/layout_cardview.xml" value="0.4" />
+        <entry key="..\:/College/S7_Spring'22/Mobile Programming (PRM392)/project/Recipe/app/src/main/res/layout/layout_item_new.xml" value="0.4" />
+        <entry key="..\:/College/S7_Spring'22/Mobile Programming (PRM392)/project/Recipe/app/src/main/res/layout/layout_listitem.xml" value="0.4" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/drawable/button_bg.xml" value="0.1945" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/drawable/edit_text_bg.xml" value="0.1945" />
-        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/drawable/item_selector.xml" value="0.1945" />
-        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/drawable/profile_avatar_bg.xml" value="0.1945" />
-        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/drawable/rounded_corner.xml" value="0.1945" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/drawable/view_bg.xml" value="0.128" />
-        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/activity_change_password.xml" value="0.13645833333333332" />
-        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/activity_home.xml" value="0.18645833333333334" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/activity_home_page.xml" value="0.1598731884057971" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/activity_login.xml" value="0.2" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
-        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/activity_profile.xml" value="0.18645833333333334" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/activity_recipe_detail.xml" value="0.25416666666666665" />
-        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/activity_register.xml" value="0.1" />
-        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/fragment_guest_profile.xml" value="0.536" />
-        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/fragment_navbar.xml" value="0.25416666666666665" />
-        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/fragment_profile.xml" value="0.18645833333333334" />
-        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/fragment_user_profile.xml" value="0.264" />
+        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/activity_register.xml" value="0.18645833333333334" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/layout_listitem.xml" value="0.1598731884057971" />
-        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.18645833333333334" />
-        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/menu/profile_page_popup_menu.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.121" />
-        <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/drawable/edit_text_border.xml" value="0.2555" />
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/drawable/ex-img_background.xml" value="0.1175" />
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/drawable/ex_img_background.xml" value="0.2555" />
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/drawable/ic_launcher_background.xml" value="0.121" />
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/font/abril_fatface.xml" value="0.13645833333333332" />
-        <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/layout/activity_add_recipe.xml" value="0.25" />
-        <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/layout/activity_home.xml" value="0.24635416666666668" />
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/layout/activity_home_page.xml" value="0.264" />
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/layout/activity_main.xml" value="0.11980749746707194" />
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/layout/activity_main2.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/layout/activity_recipe_detail.xml" value="0.25" />
-        <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/layout/fragment_guest_profile.xml" value="0.24635416666666668" />
-        <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/layout/fragment_ingredient.xml" value="0.24635416666666668" />
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/layout/layout_listitem.xml" value="0.43204868154158216" />
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/mipmap-anydpi-v26/ex-img.xml" value="0.1175" />
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/mipmap-anydpi-v26/ex.xml" value="0.121" />
