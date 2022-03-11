@@ -95,6 +95,8 @@ public class DataAccess {
                 String password = snapshot.child("password").getValue().toString();
                 user.setId(id);
                 user.setPassword(password);
+                String imageLink = snapshot.hasChild("image_link") ? snapshot.child("image_link").getValue().toString() : null;
+                user.setImage_link(imageLink);
                 callback.onResponse(user);
             }
 
