@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
+            android:name=".UI.activities.UpdateUserProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".UI.activities.ChangePasswordActivity"
             android:exported="false" />
         <activity
@@ -20,12 +23,10 @@
         <activity
             android:name=".UI.activities.HomeActivity"
             android:exported="true">
-
         </activity>
         <activity
             android:name=".AddRecipeActivity"
             android:exported="true" >
-
         </activity>
         <activity
             android:name=".UI.activities.RecipeDetail"
@@ -35,7 +36,6 @@
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -44,7 +44,7 @@
             android:exported="true" />
         <activity
             android:name=".UI.activities.LoginActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".UI.activities.RegisterActivity"
             android:exported="false" />
@@ -52,6 +52,15 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.zhihu.matisse.sample.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths_public"></meta-data>
+        </provider>
     </application>
 
 </manifest>

@@ -16,9 +16,17 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.example.recipeproject.DataAccess.DataAccess;
+import com.example.recipeproject.InterfaceGetData.getUserCallback;
 import com.example.recipeproject.UI.activities.HomeActivity;
 import com.example.recipeproject.R;
+import com.example.recipeproject.UI.activities.UpdateUserProfileActivity;
+import com.example.recipeproject.model.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -87,6 +95,8 @@ public class UserProfileFragment extends Fragment {
                             case R.id.logout_menu_item:
                                 logoutUser();
                                 return true;
+                            case R.id.update_profile_menu_item:
+                                startActivity(new Intent(view.getContext(), UpdateUserProfileActivity.class));
                         }
                         return false;
                     }
@@ -104,9 +114,23 @@ public class UserProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView userName = view.findViewById(R.id.textViewName);
+        TextView userName = getView().findViewById(R.id.textViewName);
+        CircleImageView userAvatar = getView().findViewById(R.id.userAvatar);
 
-        userName.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DataAccess.getUserById(new getUserCallback() {
+            @Override
+            public void onResponse(User user) {
+                userName.setText(user.getName());
+
+                Picasso.with(getContext())
+                        .load(user.getImage_link())
+                        .error(R.drawable.placeholder_avatar_foreground)
+                        .resize(84,84)
+                        .centerCrop()
+                        .into(userAvatar);
+            }
+        }, firebaseUser.getUid());
 
     }
 

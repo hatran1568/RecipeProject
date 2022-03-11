@@ -47,6 +47,7 @@ public class ProfileActivity extends AbstractActivity {
             }
         });
 
+        // Instantiate layout depend on if user is logged in
         if (savedInstanceState == null) {
             if (isLoggedIn){
                 getSupportFragmentManager().beginTransaction()
@@ -59,7 +60,6 @@ public class ProfileActivity extends AbstractActivity {
                         .add(R.id.profile_layout, GuestProfileFragment.class, null)
                         .commit();
             }
-
         }
 
 
