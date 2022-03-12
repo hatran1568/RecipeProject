@@ -22,7 +22,7 @@ public class FirestoreHelper {
     // Upload uri to storage and return the download url
     public static void uploadToStorage(FirebaseStorageCallback callback, Context context, Uri fileUri){
         StorageReference storageReference = storageRef.getReference()
-                .child(System.currentTimeMillis() + "." + getFileExstension(context, fileUri));
+                .child(System.currentTimeMillis() + "." + getFileExtension(context, fileUri));
 
         final String[] downloadUri = {null};
         storageReference.putFile(fileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -60,7 +60,7 @@ public class FirestoreHelper {
         });
     }
 
-    private static String getFileExstension(Context context, Uri uri) {
+    private static String getFileExtension(Context context, Uri uri) {
         ContentResolver contentResolver = context.getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(contentResolver.getType(uri));
