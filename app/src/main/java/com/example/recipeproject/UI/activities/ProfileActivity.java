@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.recipeproject.AddRecipeActivity;
 import com.example.recipeproject.R;
 import com.example.recipeproject.UI.fragments.GuestProfileFragment;
 import com.example.recipeproject.UI.fragments.UserProfileFragment;
@@ -32,7 +33,8 @@ public class ProfileActivity extends AbstractActivity {
                 switch (item.getItemId()){
                     case R.id.nav_add:
                         // TODO: add intent to add recipe
-
+                        startActivity(new Intent(getApplicationContext(), AddRecipeActivity.class));
+                        overridePendingTransition(0,0);
                         return true;
                     case R.id.nav_home:
                         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
@@ -40,7 +42,8 @@ public class ProfileActivity extends AbstractActivity {
                         return true;
                     case R.id.nav_search:
                         // TODO: add intent to search activity
-
+                        startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                        overridePendingTransition(0,0);
                         return true;
                 }
                 return false;
