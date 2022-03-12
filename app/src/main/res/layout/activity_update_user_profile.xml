@@ -89,6 +89,7 @@
         android:layout_width="335dp"
         android:layout_height="54dp"
         android:backgroundTint="#EF749E"
+        android:editable="false"
         android:ems="10"
         android:inputType="textEmailAddress"
         app:layout_constraintStart_toStartOf="@+id/textView7"
