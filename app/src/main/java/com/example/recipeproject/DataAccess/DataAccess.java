@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.recipeproject.InterfaceGetData.FirebaseCallback;
+import com.example.recipeproject.InterfaceGetData.getRecipeCallback;
 import com.example.recipeproject.InterfaceGetData.getUserCallback;
 import com.example.recipeproject.model.Recipe;
 import com.example.recipeproject.model.Step;
@@ -73,6 +74,54 @@ public class DataAccess {
             }
 
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public static void getRecipeById(getRecipeCallback callback, String id){
+        Recipe recipe = new Recipe();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference recipeRef = database.getReference("recipe").child(id);
+        recipeRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String name = snapshot.child("name").getValue().toString();
+                recipe.setName(name);
+                String description = snapshot.child("description").getValue().toString();
+                recipe.setDescription(description);
+                String duration = snapshot.child("duration").getValue().toString();
+                recipe.setDuration(duration);
+                String portion = snapshot.child("portion").getValue().toString();
+                recipe.setPortion(portion);
+                String thumbnail = snapshot.child("thumbnail").getValue().toString();
+                recipe.setThumbnail(thumbnail);
+                String userId = snapshot.child("userId").getValue().toString();
+                recipe.setUserID(userId);
+
+                int id = Integer.parseInt(snapshot.child("id").getValue().toString());
+                recipe.setId(id);
+
+                ArrayList<Step> steps = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.child("steps").getChildren()
+                ) {
+                    Step step = dataSnapshot.getValue(Step.class);
+                    steps.add(step);
+                }
+                recipe.setSteps(steps);
+
+                ArrayList<String> ingredients = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.child("ingredients").getChildren()
+                ) {
+                    ingredients.add(dataSnapshot.getValue().toString());
+                }
+                recipe.setIngredients(ingredients);
+                Date date = Date.valueOf(snapshot.child("date").getValue().toString());
+                recipe.setDate(date);
+                callback.onResponse(recipe);
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

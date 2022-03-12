@@ -35,7 +35,7 @@
                 tools:layout_editor_absoluteX="0dp" />
 
             <ImageView
-                android:id="@+id/recipeImg"
+                android:id="@+id/recipeImg1"
                 android:layout_width="273dp"
                 android:layout_height="117dp"
                 android:layout_marginTop="4dp"
@@ -56,7 +56,7 @@
                 android:textColor="#FFFFFF"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recipeImg" />
+                app:layout_constraintTop_toBottomOf="@+id/recipeImg1" />
 
             <TextView
                 android:id="@+id/description"
