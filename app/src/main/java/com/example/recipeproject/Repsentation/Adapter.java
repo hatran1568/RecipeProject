@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.LayoutInflater;
@@ -37,6 +39,7 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
         TextView recipeDescription;
         CardView card;
         Context context;
+        ImageView avatar;
         public  MyView(View view){
             super(view);
            userName= view.findViewById(R.id.userName1);
@@ -44,6 +47,7 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
            recipeImg = view.findViewById(R.id.recipeImg1);
            recipeDescription = view.findViewById(R.id.description1);
            card = view.findViewById(R.id.card1);
+           avatar = view.findViewById(R.id.avatar);
         }
 
 
@@ -81,6 +85,7 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
             @Override
             public void onResponse(User user) {
                 holder.userName.setText(user.getName());
+                Picasso.with(mContext).load(user.getImage_link()).into(holder.avatar);
             }
         },recipe.getUserID());
 
