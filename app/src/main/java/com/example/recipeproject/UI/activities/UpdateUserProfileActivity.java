@@ -56,6 +56,8 @@ public class UpdateUserProfileActivity extends AbstractActivity {
     private Toolbar toolbar;
     private Uri imageUri;
 
+    private boolean isImageChanged = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +109,7 @@ public class UpdateUserProfileActivity extends AbstractActivity {
             }
         });
 
+        // set all fields with data of current user
         DataAccess.getUserById(new getUserCallback() {
             @Override
             public void onResponse(User user) {
@@ -115,9 +118,9 @@ public class UpdateUserProfileActivity extends AbstractActivity {
                 Picasso.with(UpdateUserProfileActivity.this)
                         .load(user.getImage_link())
                         .error(R.drawable.placeholder_avatar_foreground)
+                        .resize(200,200)
                         .centerCrop()
                         .into(userAvatar);
-                //userAvatar.setImageURI(Uri.parse(user.getImage_link()));
             }
         }, firebaseUser.getUid());
     }
@@ -142,6 +145,7 @@ public class UpdateUserProfileActivity extends AbstractActivity {
             if (requestCode == PICKER_REQUEST_CODE && data != null){
                 imageUri = Matisse.obtainResult(data).get(0);
                 userAvatar.setImageURI(imageUri);
+                isImageChanged = true;
             }
         }
     }
@@ -151,22 +155,29 @@ public class UpdateUserProfileActivity extends AbstractActivity {
         String userId = firebaseUser.getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("user").child(userId);
 
-        /*reference.child("image_link").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()){
-                    String iUrl = String.valueOf(task.getResult().getValue());
-                    if (iUrl != null){
-                        Log.d("firebase", iUrl);
-                        FirestoreHelper.deleteFile(String.valueOf(task.getResult().getValue()));
+        reference.child("email").setValue(editTextEmail.getText().toString());
+        reference.child("name").setValue(editTextUsername.getText().toString());
+        reference.child("description").setValue(editTextDescription.getText().toString());
+
+        if (isImageChanged){
+            reference.child("image_link").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (task.isSuccessful()){
+                        String iUrl = String.valueOf(task.getResult().getValue());
+                        if (iUrl != null){
+                            Log.d("firebase", iUrl);
+                            FirestoreHelper.deleteFile(String.valueOf(task.getResult().getValue()));
+                        }
+                    } else {
+                        Log.e("firebase", "Error getting data", task.getException());
                     }
-                } else {
-                    Log.e("firebase", "Error getting data", task.getException());
                 }
-            }
-        });*/
-        
-        new UploadPhoto().execute();
+            });
+            new UploadPhoto().execute();
+        } else {
+            startActivity(new Intent(UpdateUserProfileActivity.this, ProfileActivity.class));
+        }
     }
 
 
@@ -212,9 +223,6 @@ public class UpdateUserProfileActivity extends AbstractActivity {
             FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
                 @Override
                 public void onResponse(String url) {
-                    reference.child("email").setValue(editTextEmail.getText().toString());
-                    reference.child("name").setValue(editTextUsername.getText().toString());
-                    reference.child("description").setValue(editTextDescription.getText().toString());
                     reference.child("image_link").setValue(url);
                     Log.d("Firebase", "Get value of download url: "+ url);
                 }

@@ -126,6 +126,7 @@ public class UserProfileFragment extends Fragment {
                 Picasso.with(getContext())
                         .load(user.getImage_link())
                         .error(R.drawable.placeholder_avatar_foreground)
+                        .resize(200,200)
                         .centerCrop()
                         .into(userAvatar);
             }
