@@ -69,8 +69,8 @@ public class HomeActivity extends AppCompatActivity implements SelectListener {
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.nav_search:
-                        // TODO: add intent to search activity
-
+                        startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                        overridePendingTransition(0,0);
                         return true;
                 }
                 return false;
