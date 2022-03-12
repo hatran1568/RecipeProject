@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.recipeproject.InterfaceGetData.FirebaseStorageCallback;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -19,7 +20,7 @@ public class FirestoreHelper {
     private static FirebaseStorage storageRef = FirebaseStorage.getInstance();
 
     // Upload uri to storage and return the download url
-    public static String uploadToStorage(Context context, Uri fileUri){
+    public static void uploadToStorage(FirebaseStorageCallback callback, Context context, Uri fileUri){
         StorageReference storageReference = storageRef.getReference()
                 .child(System.currentTimeMillis() + "." + getFileExstension(context, fileUri));
 
@@ -32,6 +33,7 @@ public class FirestoreHelper {
                     public void onSuccess(Uri uri) {
                         Log.d("Firebase storage", "Uploaded " + fileUri + " to " + uri.toString());
                         downloadUri[0] = uri.toString();
+                        callback.onResponse(downloadUri[0]);
                     }
                 });
             }
@@ -41,7 +43,6 @@ public class FirestoreHelper {
                 Toast.makeText(context, "Upload failed", Toast.LENGTH_LONG).show();
             }
         });
-        return downloadUri[0];
     }
 
     public static void deleteFile(String url){
