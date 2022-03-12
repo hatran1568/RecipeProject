@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.recipeproject.DataAccess.DataAccess;
+import com.example.recipeproject.InterfaceGetData.FirebaseStorageCallback;
 import com.example.recipeproject.InterfaceGetData.getUserCallback;
 import com.example.recipeproject.R;
 import com.example.recipeproject.model.User;
@@ -113,7 +115,6 @@ public class UpdateUserProfileActivity extends AbstractActivity {
                 Picasso.with(UpdateUserProfileActivity.this)
                         .load(user.getImage_link())
                         .error(R.drawable.placeholder_avatar_foreground)
-                        .resize(84,84)
                         .centerCrop()
                         .into(userAvatar);
                 //userAvatar.setImageURI(Uri.parse(user.getImage_link()));
@@ -164,31 +165,8 @@ public class UpdateUserProfileActivity extends AbstractActivity {
                 }
             }
         });*/
-
-        reference.child("image_link").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.getValue()!=null){
-                    FirestoreHelper.deleteFile(snapshot.getValue().toString());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        String downloadUrl = FirestoreHelper.uploadToStorage(UpdateUserProfileActivity.this, imageUri);
-
-        Log.d("Firebase storage","Get download url: "+ downloadUrl);
-
-
-        reference.child("email").setValue(editTextEmail.getText().toString());
-        reference.child("name").setValue(editTextUsername.getText().toString());
-        reference.child("description").setValue(editTextDescription.getText().toString());
-        reference.child("image_link").setValue(downloadUrl);
-
-        startActivity(new Intent(UpdateUserProfileActivity.this, ProfileActivity.class));
+        
+        new UploadPhoto().execute();
     }
 
 
@@ -223,4 +201,33 @@ public class UpdateUserProfileActivity extends AbstractActivity {
             }
         }
     }
+
+    private class UploadPhoto extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            String userId = firebaseUser.getUid();
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("user").child(userId);
+
+            FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
+                @Override
+                public void onResponse(String url) {
+                    reference.child("email").setValue(editTextEmail.getText().toString());
+                    reference.child("name").setValue(editTextUsername.getText().toString());
+                    reference.child("description").setValue(editTextDescription.getText().toString());
+                    reference.child("image_link").setValue(url);
+                    Log.d("Firebase", "Get value of download url: "+ url);
+                }
+            },UpdateUserProfileActivity.this, imageUri);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            super.onPostExecute(unused);
+            startActivity(new Intent(UpdateUserProfileActivity.this, ProfileActivity.class));
+        }
+
+    }
 }
+
