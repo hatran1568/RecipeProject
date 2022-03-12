@@ -1,39 +1,49 @@
 package com.example.recipeproject.UI.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+
+import com.bumptech.glide.Glide;
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.getUserCallback;
 import com.example.recipeproject.R;
 import com.example.recipeproject.model.User;
+import com.example.recipeproject.utils.FirestoreHelper;
+import com.example.recipeproject.utils.PermissionHelper;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.engine.impl.PicassoEngine;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
+
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UpdateUserProfileActivity extends AbstractActivity {
 
-    private static final int OPEN_IMAGE_REQUEST_CODE = 100;
     private static final int PICKER_REQUEST_CODE = 101;
     private CircleImageView userAvatar;
     private ImageButton btnAddPhoto;
@@ -87,7 +97,7 @@ public class UpdateUserProfileActivity extends AbstractActivity {
                         android.Manifest.permission.WRITE_EXTERNAL_STORAGE
                 };
                 // Check user permission
-                if(hasPermissions(UpdateUserProfileActivity.this, PERMISSIONS)){
+                if(PermissionHelper.hasPermissions(UpdateUserProfileActivity.this, PERMISSIONS)){
                     showImagePicker();
                 }else{
                     ActivityCompat.requestPermissions(UpdateUserProfileActivity.this, PERMISSIONS, PICKER_REQUEST_CODE);
@@ -100,7 +110,13 @@ public class UpdateUserProfileActivity extends AbstractActivity {
             public void onResponse(User user) {
                 editTextEmail.setText(user.getEmail());
                 editTextUsername.setText(user.getName());
-                userAvatar.setImageURI(Uri.parse(user.getImage_link()));
+                Picasso.with(UpdateUserProfileActivity.this)
+                        .load(user.getImage_link())
+                        .error(R.drawable.placeholder_avatar_foreground)
+                        .resize(84,84)
+                        .centerCrop()
+                        .into(userAvatar);
+                //userAvatar.setImageURI(Uri.parse(user.getImage_link()));
             }
         }, firebaseUser.getUid());
     }
@@ -115,7 +131,6 @@ public class UpdateUserProfileActivity extends AbstractActivity {
                 .thumbnailScale(0.85f)
                 .imageEngine(new PicassoEngine())
                 .forResult(PICKER_REQUEST_CODE);
-
     }
 
 
@@ -125,9 +140,6 @@ public class UpdateUserProfileActivity extends AbstractActivity {
         if (resultCode == RESULT_OK){
             if (requestCode == PICKER_REQUEST_CODE && data != null){
                 imageUri = Matisse.obtainResult(data).get(0);
-                String res = Matisse.obtainResult(data).get(0).toString();
-
-                editTextDescription.setText(res);
                 userAvatar.setImageURI(imageUri);
             }
         }
@@ -135,27 +147,51 @@ public class UpdateUserProfileActivity extends AbstractActivity {
 
     private void updateUserProfile() {
         //TODO: add actual logic to upload photo storage and update user record
+        String userId = firebaseUser.getUid();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("user").child(userId);
+
+        /*reference.child("image_link").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()){
+                    String iUrl = String.valueOf(task.getResult().getValue());
+                    if (iUrl != null){
+                        Log.d("firebase", iUrl);
+                        FirestoreHelper.deleteFile(String.valueOf(task.getResult().getValue()));
+                    }
+                } else {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+            }
+        });*/
+
+        reference.child("image_link").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue()!=null){
+                    FirestoreHelper.deleteFile(snapshot.getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        String downloadUrl = FirestoreHelper.uploadToStorage(UpdateUserProfileActivity.this, imageUri);
+
+        Log.d("Firebase storage","Get download url: "+ downloadUrl);
+
+
+        reference.child("email").setValue(editTextEmail.getText().toString());
+        reference.child("name").setValue(editTextUsername.getText().toString());
+        reference.child("description").setValue(editTextDescription.getText().toString());
+        reference.child("image_link").setValue(downloadUrl);
 
         startActivity(new Intent(UpdateUserProfileActivity.this, ProfileActivity.class));
     }
 
-    /**
-     * Helper method that verifies whether the permissions of a given array are granted or not.
-     *
-     * @param context
-     * @param permissions
-     * @return {Boolean}
-     */
-    public static boolean hasPermissions(Context context, String... permissions) {
-        if (context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+
 
     /**
      * Callback that handles the status of the permissions request.
@@ -183,7 +219,6 @@ public class UpdateUserProfileActivity extends AbstractActivity {
                             Toast.LENGTH_SHORT
                     ).show();
                 }
-
                 return;
             }
         }
