@@ -139,6 +139,10 @@ public class SearchActivity extends AbstractActivity implements SelectListener {
     }
     @Override
     public void onItemClick(Recipe recipe) {
-
+        Intent intent = new Intent(getApplicationContext(), RecipeDetail.class);
+        Bundle b = new Bundle();
+        b.putInt("recipeId", recipe.getId()); //Your id
+        intent.putExtras(b); //Put your id to your next Intent
+        startActivity(intent);
     }
 }

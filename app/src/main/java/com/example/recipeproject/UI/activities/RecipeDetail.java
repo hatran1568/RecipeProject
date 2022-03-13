@@ -1,32 +1,37 @@
 package com.example.recipeproject.UI.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 //import android.widget.Toolbar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.getRecipeCallback;
 import com.example.recipeproject.InterfaceGetData.getUserCallback;
 import com.example.recipeproject.R;
+import com.example.recipeproject.Repsentation.StepAdapter;
 import com.example.recipeproject.model.Recipe;
 import com.example.recipeproject.model.User;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class RecipeDetail extends AbstractActivity {
     private Context mContext;
     private Activity mActivity;
-
+    RecyclerView.LayoutManager RecyclerViewLayoutManager;
     //private Recipe recipe;
     private int recipeId;
     TextView recipeName;
@@ -38,6 +43,8 @@ public class RecipeDetail extends AbstractActivity {
     TextView userName2;
     TextView date;
     SimpleDateFormat formatter;
+    ListView listIngredients;
+    RecyclerView recyclerSteps;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +65,8 @@ public class RecipeDetail extends AbstractActivity {
         userName1 = findViewById(R.id.detail_username1);
         userName2 = findViewById(R.id.detail_username2);
         date = findViewById(R.id.detail_date);
-
+        listIngredients = findViewById(R.id.detail_list_ingredients);
+        recyclerSteps = findViewById(R.id.detail_recycler_steps);
         Bundle b = getIntent().getExtras();
         int recipeId = -1; // or other values
         if(b != null)
@@ -81,6 +89,25 @@ public class RecipeDetail extends AbstractActivity {
                 recipeName.setText(recipe.getName());
                 description.setText(recipe.getDescription());
                 date.setText("On " + formatter.format(recipe.getDate()));
+                ArrayList<String> ingredients = recipe.getIngredients();
+                ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<String>(
+                        mContext,
+                        R.layout.ingredient_item,
+                        R.id.ingredient_name,
+                        ingredients
+                        );
+                listIngredients.setAdapter(ingredientAdapter);
+                setListViewHeightBasedOnChildren(listIngredients);
+
+                RecyclerViewLayoutManager
+                        = new LinearLayoutManager(
+                        getApplicationContext());
+                StepAdapter stepAdapter = new StepAdapter(recipe.getSteps(), mContext, mActivity);
+                LinearLayoutManager verticalLayout
+                        = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+                recyclerSteps.setLayoutManager(verticalLayout);
+                recyclerSteps.setAdapter(stepAdapter);
+
             }
         }, recipeId);
     }
@@ -94,5 +121,27 @@ public class RecipeDetail extends AbstractActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
 
-}
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+            System.out.println(totalHeight);
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = (totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1)));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+    }
+
+

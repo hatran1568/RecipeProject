@@ -115,7 +115,8 @@ public class DataAccess {
                 ArrayList<String> ingredients = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.child("ingredients").getChildren()
                 ) {
-                    ingredients.add(dataSnapshot.getValue().toString());
+                    String ingredient = dataSnapshot.getValue().toString();
+                    ingredients.add(ingredient);
                 }
                 recipe.setIngredients(ingredients);
                 Date date = Date.valueOf(snapshot.child("date").getValue().toString());
