@@ -18,7 +18,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
-import com.bumptech.glide.Glide;
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.FirebaseStorageCallback;
 import com.example.recipeproject.InterfaceGetData.getUserCallback;
@@ -29,18 +28,13 @@ import com.example.recipeproject.utils.PermissionHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.engine.impl.PicassoEngine;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
-
-import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -72,7 +66,7 @@ public class UpdateUserProfileActivity extends AbstractActivity {
         userAvatar = findViewById(R.id.imageView5);
         editTextUsername = findViewById(R.id.editTextName);
         editTextEmail = findViewById(R.id.editTextEmail);
-        editTextDescription = findViewById(R.id.editTextDescription);
+        editTextDescription = findViewById(R.id.RecipeDescription);
 
         // set on click events for button inside toolbar
         Button saveProfileBtn = findViewById(R.id.saveProfileButton);

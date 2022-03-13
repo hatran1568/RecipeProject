@@ -111,11 +111,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:text="Description"
-        app:layout_constraintStart_toStartOf="@+id/editTextDescription"
+        app:layout_constraintStart_toStartOf="@+id/RecipeDescription"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
 
     <EditText
-        android:id="@+id/editTextDescription"
+        android:id="@+id/RecipeDescription"
         android:layout_width="333dp"
         android:layout_height="168dp"
         android:backgroundTint="#EF749E"
