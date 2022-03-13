@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 //import android.widget.Toolbar;
@@ -20,12 +23,12 @@ import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 
-public class RecipeDetail extends AppCompatActivity {
+public class RecipeDetail extends AbstractActivity {
     private Context mContext;
     private Activity mActivity;
 
     //private Recipe recipe;
-    private String recipeId = "recipe2";
+    private int recipeId;
     TextView recipeName;
     ImageView image;
     ImageView avatar1;
@@ -41,7 +44,11 @@ public class RecipeDetail extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_detail);
         mContext = getApplicationContext();
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar2);
-        //setSupportActionBar(myToolbar);
+        setSupportActionBar(myToolbar);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
         formatter = new SimpleDateFormat("d MMM yyyy");
         image = findViewById(R.id.detail_recipe_img);
         recipeName = findViewById(R.id.detail_recipe_name);
@@ -51,6 +58,12 @@ public class RecipeDetail extends AppCompatActivity {
         userName1 = findViewById(R.id.detail_username1);
         userName2 = findViewById(R.id.detail_username2);
         date = findViewById(R.id.detail_date);
+
+        Bundle b = getIntent().getExtras();
+        int recipeId = -1; // or other values
+        if(b != null)
+            recipeId = b.getInt("recipeId");
+
         DataAccess.getRecipeById(new getRecipeCallback() {
             @Override
             public void onResponse(Recipe recipe) {
@@ -71,4 +84,15 @@ public class RecipeDetail extends AppCompatActivity {
             }
         }, recipeId);
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

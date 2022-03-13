@@ -22,5 +22,6 @@ public abstract class AbstractActivity extends AppCompatActivity {
         if (firebaseUser != null){
             isLoggedIn = true;
         }
+
     }
 }

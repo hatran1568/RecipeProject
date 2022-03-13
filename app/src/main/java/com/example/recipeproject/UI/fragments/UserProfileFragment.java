@@ -6,6 +6,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -18,11 +21,14 @@ import android.widget.TextView;
 
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.getUserCallback;
+import com.example.recipeproject.Repsentation.ViewPagerAdapter;
 import com.example.recipeproject.UI.activities.ChangePasswordActivity;
 import com.example.recipeproject.UI.activities.HomeActivity;
 import com.example.recipeproject.R;
 import com.example.recipeproject.UI.activities.UpdateUserProfileActivity;
 import com.example.recipeproject.model.User;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -66,6 +72,9 @@ public class UserProfileFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    private TabLayout tabLayout;
+    private ViewPager viewPager2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,6 +120,29 @@ public class UserProfileFragment extends Fragment {
                 popup.show();
             }
         });
+
+        tabLayout = rootview.findViewById(R.id.tabLayout);
+        viewPager2 = rootview.findViewById(R.id.viewPager);
+
+/*        new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull com.google.android.material.tabs.TabLayout.Tab tab, int position) {
+                String tabTitle = "";
+                if (position == 0){
+                    tabTitle = "Favorites";
+                } else if (position == 1){
+                    tabTitle = "My Recipes";
+                }
+            }
+        }).attach();*/
+
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        adapter.addFragment(new FavoriteRecipesFragment(), "Favorites");
+        adapter.addFragment(new MyRecipeFragment(), "My recipes");
+        viewPager2.setAdapter(adapter);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager2));
+        viewPager2.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         return rootview;
     }
