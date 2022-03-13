@@ -29,7 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -41,17 +40,18 @@ public class AddRecipeActivity extends AbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_recipe);
+
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         recipe = new Recipe();
          rename= findViewById(R.id.RecipeName);
-        TextView RecipeDescription = findViewById(R.id.RecipeDescription);
-        TextView portion = findViewById(R.id.ReicpePortion);
-        TextView duration = findViewById(R.id.RecipeDuration);
+        EditText RecipeDescription = findViewById(R.id.RecipeDescription);
+        EditText portion = findViewById(R.id.ReicpePortion);
+        EditText duration = findViewById(R.id.RecipeDuration);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference().child("test");
         ArrayList<Integer> ingreId = new ArrayList<>();
         ArrayList<String> ingredients = new ArrayList<>();
-        setContentView(R.layout.activity_add_recipe);
         LinearLayout addIngre = findViewById(R.id.AddIngredientsLayout);
         View addIngreBtn =findViewById(R.id.AddIngredientBtn);
         View addStepBtn = findViewById(R.id.AddStepButton);
