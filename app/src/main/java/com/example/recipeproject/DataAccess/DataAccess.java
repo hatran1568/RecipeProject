@@ -81,13 +81,13 @@ public class DataAccess {
         });
     }
 
-    public static void getRecipeById(getRecipeCallback callback, String id){
+    public static void getRecipeById(getRecipeCallback callback, int id){
         Recipe recipe = new Recipe();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference recipeRef = database.getReference("recipe").child(id);
-        recipeRef.addValueEventListener(new ValueEventListener() {
+        DatabaseReference recipeRef = database.getReference("recipe");
+        recipeRef.orderByChild("id").equalTo(id).addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String name = snapshot.child("name").getValue().toString();
                 recipe.setName(name);
                 String description = snapshot.child("description").getValue().toString();
@@ -122,6 +122,22 @@ public class DataAccess {
                 recipe.setDate(date);
                 callback.onResponse(recipe);
             }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
