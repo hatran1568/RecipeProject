@@ -63,8 +63,8 @@
 
                 <ImageView
                     android:id="@+id/recipeImg1"
-                    android:layout_width="0dp"
-                    android:layout_height="166dp"
+                    android:layout_width="170dp"
+                    android:layout_height="164dp"
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -74,8 +74,8 @@
 
                 <TextView
                     android:id="@+id/recipeName1"
-                    android:layout_width="159dp"
-                    android:layout_height="41dp"
+                    android:layout_width="138dp"
+                    android:layout_height="42dp"
                     android:layout_marginStart="6dp"
                     android:layout_marginTop="8dp"
                     android:background="#00FFFFFF"
@@ -107,6 +107,21 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recipeName1"
                     app:layout_constraintVertical_bias="0.0" />
+
+                <ImageButton
+                    android:id="@+id/favBtn"
+                    android:layout_width="25dp"
+                    android:layout_height="27dp"
+                    android:background="@drawable/favorite_off"
+                    android:scaleType="fitCenter"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/description1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.993"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.919"
+                    app:srcCompat="@drawable/favorite_off" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
