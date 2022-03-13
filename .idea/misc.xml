@@ -19,11 +19,15 @@
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/activity_profile.xml" value="0.18645833333333334" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/activity_recipe_detail.xml" value="0.25416666666666665" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/activity_register.xml" value="0.18645833333333334" />
+        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/activity_search.xml" value="0.140625" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/activity_update_user_profile.xml" value="0.25416666666666665" />
+        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/fragment_favorite_recipes.xml" value="0.17760416666666667" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/fragment_guest_profile.xml" value="0.536" />
+        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/fragment_my_recipe.xml" value="0.140625" />
+        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/fragment_my_recipes.xml" value="0.140625" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/fragment_navbar.xml" value="0.25416666666666665" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/fragment_profile.xml" value="0.18645833333333334" />
-        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/fragment_user_profile.xml" value="0.264" />
+        <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/fragment_user_profile.xml" value="0.2" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/layout/layout_listitem.xml" value="0.1598731884057971" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.18645833333333334" />
         <entry key="..\:/FPTU Materials/Ky6_SPR22/PRM/Project/RecipeProject/app/src/main/res/menu/profile_page_popup_menu.xml" value="0.18802083333333333" />
