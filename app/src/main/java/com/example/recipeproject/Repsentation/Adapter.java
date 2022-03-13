@@ -12,13 +12,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.LayoutInflater;
 
-
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.getUserCallback;
 import com.example.recipeproject.R;
 import com.example.recipeproject.listener.SelectListener;
 import com.example.recipeproject.model.Recipe;
 import com.example.recipeproject.model.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -28,8 +34,9 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
     private Context mContext;
     private Activity mActivity;
     private SelectListener listener;
-
-
+    DatabaseReference databaseRef, favRef, favListRef, favoriteRef;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    Boolean favChecker = false;
     public class MyView extends  RecyclerView.ViewHolder {
         TextView userName;
         TextView recipeName;
@@ -38,6 +45,10 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
         CardView card;
         Context context;
         ImageView avatar;
+
+        ImageView favBtn;
+
+
         public  MyView(View view){
             super(view);
            userName= view.findViewById(R.id.userName1);
@@ -46,9 +57,36 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
            recipeDescription = view.findViewById(R.id.description1);
            card = view.findViewById(R.id.card1);
            avatar = view.findViewById(R.id.avatar);
+           favBtn = view.findViewById(R.id.favBtn);
         }
 
 
+        public void favoriteChecker(Recipe recipe) {
+            favBtn = itemView.findViewById(R.id.favBtn);
+            favoriteRef = database.getReference("user");
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String currentUserId = null;
+            if (user != null){
+                currentUserId = user.getUid();
+            }
+            String finalCurrentUserId = currentUserId;
+            final String recipeKey = String.valueOf(recipe.getId());
+
+            favoriteRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.child(finalCurrentUserId).child("favorites").hasChild(recipeKey)){
+                        favBtn.setImageResource(R.drawable.favorite_on);
+                    }
+                    else favBtn.setImageResource(R.drawable.favorite_off);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
     }
     public Adapter( ArrayList<Recipe> horizontalist,Context mContext,Activity mActivity,SelectListener listener){
         this.mContext = mContext;
@@ -61,6 +99,7 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
                                      int viewType)
     {
 
+
         // Inflate item.xml using LayoutInflator
         View itemView
                 = LayoutInflater
@@ -70,13 +109,25 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
                         false);
 
         // return itemView
+
+        favRef = database.getReference("user");
         return new MyView(itemView);
     }
     @Override
     public void onBindViewHolder(final MyView holder,
                                  int position)
     {
+        //Get Logged in user.
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String currentUserId = null;
+        if (user != null){
+            currentUserId = user.getUid();
+        }
+
         Recipe recipe = list.get(position);
+        final String recipeKey = String.valueOf(recipe.getId());
+
+
 
        holder.recipeName.setText(recipe.getName());
         DataAccess.getUserById(new getUserCallback() {
@@ -86,6 +137,37 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
                 Picasso.with(mContext).load(user.getImage_link()).into(holder.avatar);
             }
         },recipe.getUserID());
+
+        if (user != null) {
+            holder.favoriteChecker(recipe);
+            String finalCurrentUserId = currentUserId;
+            holder.favBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    favChecker = true;
+                    favRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(favChecker.equals(true)){
+                                if(snapshot.child(finalCurrentUserId).child("favorites").hasChild(recipeKey)){
+                                    favRef.child(finalCurrentUserId).child("favorites").child(recipeKey).removeValue();
+                                    favChecker = false;
+                                } else {
+                                    favRef.child(finalCurrentUserId).child("favorites").child(recipeKey).setValue(true);
+                                    favChecker = false;
+                                }
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            });
+        }
 
        holder.recipeDescription.setText(recipe.getDescription());
        Picasso.with(mContext).load(list.get(position).getThumbnail()).into(holder.recipeImg);
