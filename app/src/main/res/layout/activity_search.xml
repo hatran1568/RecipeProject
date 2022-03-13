@@ -12,7 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
         android:background="#00FFFFFF"
-        android:paddingBottom="2dp"
+        android:paddingBottom="210dp"
+        android:clipToPadding="false"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="parent"

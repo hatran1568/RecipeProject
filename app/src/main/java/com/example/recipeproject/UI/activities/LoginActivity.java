@@ -33,7 +33,7 @@ public class LoginActivity extends AbstractActivity {
         // Get reference of all components
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextEmailChangePassword);
-        btnLogin = findViewById(R.id.btnLogin);
+        btnLogin = findViewById(R.id.btnChangePwd);
         textViewForgetPassword = findViewById(R.id.forgetPasswordText);
         textViewRegister = findViewById(R.id.textRegister);
         progressBar = findViewById(R.id.progressBarLogin);
@@ -93,7 +93,7 @@ public class LoginActivity extends AbstractActivity {
         textViewForgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(view.getContext(), ChangePasswordActivity.class));
+                startActivity(new Intent(view.getContext(), ForgetPasswordActivity.class));
             }
         });
     }

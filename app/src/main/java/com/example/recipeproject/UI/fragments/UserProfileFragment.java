@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.getUserCallback;
+import com.example.recipeproject.UI.activities.ChangePasswordActivity;
 import com.example.recipeproject.UI.activities.HomeActivity;
 import com.example.recipeproject.R;
 import com.example.recipeproject.UI.activities.UpdateUserProfileActivity;
@@ -97,6 +98,10 @@ public class UserProfileFragment extends Fragment {
                                 return true;
                             case R.id.update_profile_menu_item:
                                 startActivity(new Intent(view.getContext(), UpdateUserProfileActivity.class));
+                                return true;
+                            case R.id.change_pwd_menu_item:
+                                startActivity(new Intent(view.getContext(), ChangePasswordActivity.class));
+                                return true;
                         }
                         return false;
                     }
