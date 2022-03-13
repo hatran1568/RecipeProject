@@ -124,18 +124,6 @@ public class UserProfileFragment extends Fragment {
         tabLayout = rootview.findViewById(R.id.tabLayout);
         viewPager2 = rootview.findViewById(R.id.viewPager);
 
-/*        new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull com.google.android.material.tabs.TabLayout.Tab tab, int position) {
-                String tabTitle = "";
-                if (position == 0){
-                    tabTitle = "Favorites";
-                } else if (position == 1){
-                    tabTitle = "My Recipes";
-                }
-            }
-        }).attach();*/
-
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         adapter.addFragment(new FavoriteRecipesFragment(), "Favorites");
         adapter.addFragment(new MyRecipeFragment(), "My recipes");

@@ -1,14 +1,29 @@
 package com.example.recipeproject.UI.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.SearchView;
 
+import com.example.recipeproject.DataAccess.DataAccess;
+import com.example.recipeproject.InterfaceGetData.FirebaseCallback;
 import com.example.recipeproject.R;
+import com.example.recipeproject.Repsentation.Adapter;
+import com.example.recipeproject.UI.activities.RecipeDetail;
+import com.example.recipeproject.listener.SelectListener;
+import com.example.recipeproject.model.Recipe;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +31,10 @@ import com.example.recipeproject.R;
  * create an instance of this fragment.
  */
 public class FavoriteRecipesFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    private ArrayList<Recipe> favoriteRecipes = new ArrayList<>();
+    private SearchView searchView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,7 +79,77 @@ public class FavoriteRecipesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_favorite_recipes, container, false);
+
+        searchView = rootView.findViewById(R.id.searchView);
+        recyclerView = rootView.findViewById(R.id.recyclerviewNewest);
+
+        DataAccess.getFavoritesRecipe(new FirebaseCallback() {
+            @Override
+            public void onResponse(ArrayList<Recipe> recipes) {
+                GetDataToRecyclerView(recipes);
+            }
+        }, FirebaseAuth.getInstance().getCurrentUser().getUid(), null);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                DataAccess.getFavoritesRecipe(new FirebaseCallback() {
+                    @Override
+                    public void onResponse(ArrayList<Recipe> recipes) {
+                        GetDataToRecyclerView(recipes);
+                    }
+                }, FirebaseAuth.getInstance().getCurrentUser().getUid(), s);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+
+                return true;
+            }
+        });
+
+        /*DataAccess.getFavoritesRecipe(new FirebaseCallback() {
+            @Override
+            public void onResponse(ArrayList<Recipe> recipes) {
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        for (Recipe recipe: recipes){
+
+                        }
+                        return false;
+                    }
+                });
+            }
+        }, FirebaseAuth.getInstance().getCurrentUser().getUid(), null);*/
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite_recipes, container, false);
+        return rootView;
+    }
+
+    private void GetDataToRecyclerView(ArrayList<Recipe> recipes) {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
+
+        Adapter adapter = new Adapter(recipes, getContext(), getActivity(), new SelectListener() {
+            @Override
+            public void onItemClick(Recipe recipe) {
+                Intent intent = new Intent(getContext(), RecipeDetail.class);
+                    Bundle b = new Bundle();
+                b.putInt("recipeId", recipe.getId()); //Your id
+                intent.putExtras(b); //Put your id to your next Intent
+                startActivity(intent);
+            }
+        });
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setAdapter(adapter);
     }
 }

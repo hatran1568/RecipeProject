@@ -32,7 +32,6 @@ public class ProfileActivity extends AbstractActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.nav_add:
-                        // TODO: add intent to add recipe
                         startActivity(new Intent(getApplicationContext(), AddRecipeActivity.class));
                         overridePendingTransition(0,0);
                         return true;
@@ -41,7 +40,6 @@ public class ProfileActivity extends AbstractActivity {
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.nav_search:
-                        // TODO: add intent to search activity
                         startActivity(new Intent(getApplicationContext(), SearchActivity.class));
                         overridePendingTransition(0,0);
                         return true;
