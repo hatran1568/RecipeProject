@@ -15,6 +15,15 @@ public class Recipe {
     private String userID;
     private Date date;
     private User user;
+    private String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public User getUser() {
         return user;

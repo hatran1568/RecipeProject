@@ -32,7 +32,7 @@
             tools:layout_editor_absoluteY="6dp" />
 
         <Button
-            android:id="@+id/saveProfileButton"
+            android:id="@+id/AddRecipeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"

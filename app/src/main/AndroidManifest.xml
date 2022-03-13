@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.recipeproject" >
+    package="com.example.recipeproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,12 +13,15 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:windowSoftInputMode="adjustPan">
         <activity
+            android:name=".NotLogInError"
+            android:exported="false" />
+        <activity
             android:name=".UI.activities.ChangePasswordActivity"
             android:exported="false" />
         <activity
             android:name=".UI.activities.SearchActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".UI.activities.UpdateUserProfileActivity"
             android:exported="false" />
@@ -28,8 +31,7 @@
         <activity
             android:name=".UI.activities.ProfileActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".UI.activities.HomeActivity"
             android:exported="true">
@@ -41,15 +43,15 @@
         </activity>
         <activity
             android:name=".UI.activities.RecipeDetail"
+            android:exported="true"></activity>
+        <activity
+            android:name=".UI.activities.AddRecipeActivity"
             android:exported="true">
 
         </activity>
         <activity
-            android:name=".AddRecipeActivity"
-            android:exported="true" />
-        <activity
             android:name=".UI.activities.HomePage"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".UI.activities.MainActivity"
             android:exported="true" />
@@ -68,7 +70,7 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.zhihu.matisse.sample.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true" >
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths_public" />

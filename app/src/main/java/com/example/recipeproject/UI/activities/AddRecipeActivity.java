@@ -1,18 +1,15 @@
-package com.example.recipeproject;
-
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+package com.example.recipeproject.UI.activities;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.app.ActivityCompat;
 
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -21,30 +18,63 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.recipeproject.UI.activities.AbstractActivity;
+import com.example.recipeproject.InterfaceGetData.FirebaseStorageCallback;
+import com.example.recipeproject.R;
 import com.example.recipeproject.model.Recipe;
+import com.example.recipeproject.model.Step;
+import com.example.recipeproject.utils.FirestoreHelper;
+import com.example.recipeproject.utils.PermissionHelper;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AddRecipeActivity extends AbstractActivity {
+    final int PICKER_REQUEST_CODE =100;
     EditText rename;
     Recipe recipe;
+    Map<Integer,Uri> URIMapping = new HashMap<>();
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add_recipe);
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         recipe = new Recipe();
+        ImageButton backBtn = findViewById(R.id.backButton);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+        ImageView RecipeThumbnail = findViewById(R.id.RecipeImage);
+        RecipeThumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String[] PERMISSIONS = {
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                };
+                // Check user permission
+                if(PermissionHelper.hasPermissions(AddRecipeActivity.this, PERMISSIONS)){
+                    showImagePicker(R.id.RecipeImage);
+                }else{
+                    ActivityCompat.requestPermissions(AddRecipeActivity.this, PERMISSIONS, PICKER_REQUEST_CODE);
+                }
+            }
+
+        });
          rename= findViewById(R.id.RecipeName);
+         ArrayList<Integer> stepTextId = new ArrayList<>();
+         ArrayList<Integer> imgStepId = new ArrayList<>();
         EditText RecipeDescription = findViewById(R.id.RecipeDescription);
         EditText portion = findViewById(R.id.ReicpePortion);
         EditText duration = findViewById(R.id.RecipeDuration);
@@ -52,6 +82,7 @@ public class AddRecipeActivity extends AbstractActivity {
         DatabaseReference myRef = database.getReference().child("test");
         ArrayList<Integer> ingreId = new ArrayList<>();
         ArrayList<String> ingredients = new ArrayList<>();
+        ArrayList<Step> steps = new ArrayList<>();
         LinearLayout addIngre = findViewById(R.id.AddIngredientsLayout);
         View addIngreBtn =findViewById(R.id.AddIngredientBtn);
         View addStepBtn = findViewById(R.id.AddStepButton);
@@ -116,7 +147,24 @@ public class AddRecipeActivity extends AbstractActivity {
                 ImageView img = new ImageView(getApplicationContext());
                 img.setImageDrawable(getDrawable(R.drawable.ic_food));
                 img.setId(View.generateViewId());
+                stepTextId.add(newStep.getId());
+                imgStepId.add(img.getId());
                 ConstraintSet set = new ConstraintSet();
+                img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String[] PERMISSIONS = {
+                                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        };
+                        // Check user permission
+                        if(PermissionHelper.hasPermissions(AddRecipeActivity.this, PERMISSIONS)){
+                            showImagePicker(img.getId());
+                        }else{
+                            ActivityCompat.requestPermissions(AddRecipeActivity.this, PERMISSIONS, PICKER_REQUEST_CODE);
+                        }
+                    }
+                });
                 ctrlayout.addView(newStep);
                 ctrlayout.addView(btn);
                 ctrlayout.addView(img);
@@ -135,6 +183,8 @@ public class AddRecipeActivity extends AbstractActivity {
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view1) {
+                        stepTextId.remove(Integer.valueOf(newStep.getId()));
+                        imgStepId.remove(Integer.valueOf(img.getId()));
                         addStep.removeView(ctrlayout);
                     }
                 });
@@ -153,15 +203,69 @@ public class AddRecipeActivity extends AbstractActivity {
                 recipe.setPortion(portion.getText().toString());
                 recipe.setDuration(duration.getText().toString());
                 String strDate = dtf.format(LocalDate.now());
-                recipe.setDate(Date.valueOf(strDate));
                 recipe.setIngredients(ingredients);
                 String key = myRef.push().getKey();
                 myRef.child(key).setValue(recipe);
+                myRef.child(key).child("date").setValue(strDate);
+                myRef.child(key).child("key").setValue(key);
+                myRef.child(key).child("userId").setValue(firebaseUser.getUid());
+                FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
+                    @Override
+                    public void onResponse(String url) {
+                        myRef.child(key).child("thumbnail").setValue(url);
+                        Log.d("Firebase", "Get value of download url: "+ url);
+                    }
+                },AddRecipeActivity.this, URIMapping.get(R.id.RecipeImage));
+                for(int i =0;i<stepTextId.size();i++){
+                    Step s = new Step();
+                    String stepKey = myRef.child(key).child("steps").push().getKey();
+                    TextView  t = findViewById(stepTextId.get(i));
+                    myRef.child(key).child("steps").child(stepKey).child("text").setValue(t.getText().toString());
+                    ImageView imageUri = findViewById(imgStepId.get(i));
+                    FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
+                       @Override
+                       public void onResponse(String url) {
+                           myRef.child(key).child("steps").child(stepKey).child("image").setValue(url);
+                           Log.d("Firebase", "Get value of download url: "+ url);
+                       }
+                   },AddRecipeActivity.this, URIMapping.get(imgStepId.get(i)));
+
+               }
 
             }
         });
 
     }
+    private void showImagePicker(int id) {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(
+                Intent.createChooser(
+                        intent,
+                        "Select Image from here..."),
+                id);
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+
+            // compare the resultCode with the
+            // SELECT_PICTURE constant
+
+                // Get the url of the image from data
+                Uri selectedImageUri = data.getData();
+                if (null != selectedImageUri) {
+                    // update the preview image in the layout
+                    ImageView imageView = findViewById(requestCode);
+                    URIMapping.put(requestCode,selectedImageUri);
+                    imageView.setImageURI(selectedImageUri);
+
+            }
+        }
+    }
+
 
 
 }

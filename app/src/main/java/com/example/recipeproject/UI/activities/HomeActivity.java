@@ -1,7 +1,6 @@
 package com.example.recipeproject.UI.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.FirebaseCallback;
+import com.example.recipeproject.NotLogInError;
 import com.example.recipeproject.R;
 import com.example.recipeproject.Repsentation.Adapter;
 import com.example.recipeproject.listener.SelectListener;
@@ -24,7 +24,7 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity implements SelectListener {
+public class HomeActivity extends AbstractActivity implements SelectListener {
     private Context mContext;
     private Activity mActivity;
     RecyclerView recyclerView;
@@ -62,7 +62,14 @@ public class HomeActivity extends AppCompatActivity implements SelectListener {
                 switch (item.getItemId()){
                     case R.id.nav_add:
                         // TODO: add intent to add recipe
-
+                        if(isLoggedIn){
+                            startActivity(new Intent(getApplicationContext(), AddRecipeActivity.class));
+                            overridePendingTransition(0,0);
+                        }
+                        else{
+                            startActivity(new Intent(getApplicationContext(), NotLogInError.class));
+                            overridePendingTransition(0,0);
+                        }
                         return true;
                     case R.id.nav_profile:
                         startActivity(new Intent(getApplicationContext(), ProfileActivity.class));

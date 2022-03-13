@@ -69,7 +69,7 @@ public class UpdateUserProfileActivity extends AbstractActivity {
         editTextDescription = findViewById(R.id.RecipeDescription);
 
         // set on click events for button inside toolbar
-        Button saveProfileBtn = findViewById(R.id.saveProfileButton);
+        Button saveProfileBtn = findViewById(R.id.AddRecipeButton);
         saveProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

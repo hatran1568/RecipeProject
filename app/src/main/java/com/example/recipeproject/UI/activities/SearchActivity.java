@@ -1,7 +1,6 @@
 package com.example.recipeproject.UI.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.example.recipeproject.AddRecipeActivity;
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.FirebaseCallback;
 import com.example.recipeproject.R;
@@ -25,9 +23,7 @@ import com.example.recipeproject.model.Recipe;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class SearchActivity extends AbstractActivity implements SelectListener {
     private Context mContext;
