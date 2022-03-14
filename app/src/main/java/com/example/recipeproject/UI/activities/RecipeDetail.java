@@ -3,6 +3,7 @@ package com.example.recipeproject.UI.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -143,6 +144,16 @@ public class RecipeDetail extends AbstractActivity {
                         showConfirmDelete();
                     }
                 });
+                editBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getApplicationContext(), EditRecipe.class);
+                        Bundle b = new Bundle();
+                        b.putString("recipeId", recipeId); //Your id
+                        intent.putExtras(b); //Put your id to your next Intent
+                        startActivity(intent);
+                    }
+                });
 
             }
         }, recipeId);
@@ -187,7 +198,6 @@ public class RecipeDetail extends AbstractActivity {
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        System.out.println("Delete Confirmed");
                         DataAccess.deleteRecipeByKey(recipeId);
                         finish();
                     }})
