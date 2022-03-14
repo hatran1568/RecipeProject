@@ -1,6 +1,8 @@
 package com.example.recipeproject.Repsentation;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.getUserCallback;
 import com.example.recipeproject.R;
+import com.example.recipeproject.UI.activities.RecipeDetail;
+import com.example.recipeproject.listener.SelectListener;
 import com.example.recipeproject.model.Recipe;
 import com.example.recipeproject.model.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -38,8 +42,20 @@ public class FavoriteRecipeAdapter extends FirebaseRecyclerAdapter<Recipe, Favor
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Recipe model) {
-        
+        DataAccess.getUserById(new getUserCallback() {
+            @Override
+            public void onResponse(User user) {
+                holder.userName.setText(user.getName());
+                Picasso.with(holder.avatar.getContext()).load(user.getImage_link()).into(holder.avatar);
+            }
+        },model.getUserID());
+        holder.recipeName.setText(model.getName());
+        holder.recipeDescription.setText(model.getDescription());
+        if (model.getThumbnail() != null && !model.getThumbnail().isEmpty())
+            Picasso.with(holder.avatar.getContext()).load(model.getThumbnail()).into(holder.recipeImg);
+        holder.card.setOnClickListener(holder.onClick(););
     }
+
 
     @NonNull
     @Override
@@ -52,20 +68,29 @@ public class FavoriteRecipeAdapter extends FirebaseRecyclerAdapter<Recipe, Favor
                         false);
 
         // return itemView
-        return new FavoriteRecipeAdapter.ViewHolder(itemView);
+        return new FavoriteRecipeAdapter.ViewHolder(itemView, new MyClickListener() {
+            @Override
+            public void onSelect(int p) {
+                Intent intent = new Intent((itemView.getContext()), RecipeDetail.class);
+                Bundle b = new Bundle();
+                b.putInt("recipeId", recipe.getId()); //Your id
+                intent.putExtras(b); //Put your id to your next Intent
+                itemView.getContext().startActivity(intent);
+            }
+        });
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        MyClickListener listener;
 
         TextView userName;
         TextView recipeName;
         ImageView recipeImg;
         TextView recipeDescription;
         CardView card;
-        Context context;
         ImageView avatar;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, MyClickListener listener) {
             super(itemView);
             userName= itemView.findViewById(R.id.userName1);
             recipeName = itemView.findViewById(R.id.recipeName1);
@@ -73,7 +98,18 @@ public class FavoriteRecipeAdapter extends FirebaseRecyclerAdapter<Recipe, Favor
             recipeDescription = itemView.findViewById(R.id.description1);
             card = itemView.findViewById(R.id.card1);
             avatar = itemView.findViewById(R.id.avatar);
+            this.listener = listener;
         }
 
+        @Override
+        public void onClick(View view) {
+
+        }
+    }
+
+    public interface MyClickListener {
+        void onSelect(int p);
     }
 }
+
+
