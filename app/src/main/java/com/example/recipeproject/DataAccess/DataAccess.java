@@ -87,13 +87,13 @@ public class DataAccess {
         });
     }
 
-    public static void getRecipeById(getRecipeCallback callback, int id){
+    public static void getRecipeById(getRecipeCallback callback, String id){
         Recipe recipe = new Recipe();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference recipeRef = database.getReference("recipe");
-        recipeRef.orderByChild("id").equalTo(id).addChildEventListener(new ChildEventListener() {
+        DatabaseReference recipeRef = database.getReference("recipe").child(id);
+        recipeRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String name = snapshot.child("name").getValue().toString();
                 recipe.setName(name);
                 String description = snapshot.hasChild("description") ? snapshot.child("description").getValue().toString() : "";
@@ -113,8 +113,9 @@ public class DataAccess {
                 String key = snapshot.getKey();
                 recipe.setKey(key);
 
-                int id = Integer.parseInt(snapshot.child("id").getValue().toString());
-                recipe.setId(id);
+                recipe.setKey(id);
+                //int id = Integer.parseInt(snapshot.child("id").getValue().toString());
+                //recipe.setId(id);
 
                 ArrayList<Step> steps = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.child("steps").getChildren()
@@ -136,21 +137,6 @@ public class DataAccess {
                     date =snapshot.child("strdate").getValue();
                 recipe.setDate(Date.valueOf(date.toString()));
                 callback.onResponse(recipe);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
             }
 
             @Override
