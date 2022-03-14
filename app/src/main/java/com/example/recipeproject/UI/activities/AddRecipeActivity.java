@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +40,22 @@ public class AddRecipeActivity extends AbstractActivity {
     EditText rename;
     Recipe recipe;
     Map<Integer,Uri> URIMapping = new HashMap<>();
+    DateTimeFormatter dtf;
+    ImageButton backBtn;
+    ArrayList<Integer> stepTextId;
+    ArrayList<Integer> imgStepId;
+    FirebaseDatabase database;
+    EditText RecipeDescription;
+    EditText portion;
+    EditText duration;
+    DatabaseReference myRef;
+    ArrayList<Integer> ingreId;
+    ArrayList<String> ingredients;
+    ArrayList<Step> steps;
+    LinearLayout addIngre;
+    View addIngreBtn;
+    View addStepBtn;
+    LinearLayout addStep;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +63,9 @@ public class AddRecipeActivity extends AbstractActivity {
 
         setContentView(R.layout.activity_add_recipe);
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         recipe = new Recipe();
-        ImageButton backBtn = findViewById(R.id.backButton);
+        backBtn = findViewById(R.id.backButton);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,20 +90,34 @@ public class AddRecipeActivity extends AbstractActivity {
 
         });
          rename= findViewById(R.id.RecipeName);
-         ArrayList<Integer> stepTextId = new ArrayList<>();
-         ArrayList<Integer> imgStepId = new ArrayList<>();
-        EditText RecipeDescription = findViewById(R.id.RecipeDescription);
-        EditText portion = findViewById(R.id.ReicpePortion);
-        EditText duration = findViewById(R.id.RecipeDuration);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference().child("test");
-        ArrayList<Integer> ingreId = new ArrayList<>();
-        ArrayList<String> ingredients = new ArrayList<>();
-        ArrayList<Step> steps = new ArrayList<>();
-        LinearLayout addIngre = findViewById(R.id.AddIngredientsLayout);
-        View addIngreBtn =findViewById(R.id.AddIngredientBtn);
-        View addStepBtn = findViewById(R.id.AddStepButton);
-        LinearLayout addStep = findViewById(R.id.AddStepLayout);
+
+        stepTextId = new ArrayList<>();
+
+        imgStepId = new ArrayList<>();
+
+        RecipeDescription = findViewById(R.id.RecipeDescription);
+
+        portion = findViewById(R.id.ReicpePortion);
+
+        duration = findViewById(R.id.RecipeDuration);
+
+        database = FirebaseDatabase.getInstance();
+
+        myRef = database.getReference().child("test");
+
+        ingreId = new ArrayList<>();
+
+        ingredients = new ArrayList<>();
+
+        steps = new ArrayList<>();
+
+        addIngre = findViewById(R.id.AddIngredientsLayout);
+
+        addIngreBtn = findViewById(R.id.AddIngredientBtn);
+
+        addStepBtn = findViewById(R.id.AddStepButton);
+
+        addStep = findViewById(R.id.AddStepLayout);
         addIngreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,6 +178,7 @@ public class AddRecipeActivity extends AbstractActivity {
                 ImageView img = new ImageView(getApplicationContext());
                 img.setImageDrawable(getDrawable(R.drawable.ic_food));
                 img.setId(View.generateViewId());
+                img.setScaleType(ImageView.ScaleType.FIT_XY);
                 stepTextId.add(newStep.getId());
                 imgStepId.add(img.getId());
                 ConstraintSet set = new ConstraintSet();
@@ -194,44 +226,7 @@ public class AddRecipeActivity extends AbstractActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (Integer index: ingreId) {
-                    TextView t = findViewById(index);
-                    ingredients.add(t.getText().toString());
-                }
-                recipe.setName(rename.getText().toString());
-                recipe.setDescription(RecipeDescription.getText().toString());
-                recipe.setPortion(portion.getText().toString());
-                recipe.setDuration(duration.getText().toString());
-                String strDate = dtf.format(LocalDate.now());
-                recipe.setIngredients(ingredients);
-                String key = myRef.push().getKey();
-                myRef.child(key).setValue(recipe);
-                myRef.child(key).child("date").setValue(strDate);
-                myRef.child(key).child("key").setValue(key);
-                myRef.child(key).child("userId").setValue(firebaseUser.getUid());
-                FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
-                    @Override
-                    public void onResponse(String url) {
-                        myRef.child(key).child("thumbnail").setValue(url);
-                        Log.d("Firebase", "Get value of download url: "+ url);
-                    }
-                },AddRecipeActivity.this, URIMapping.get(R.id.RecipeImage));
-                for(int i =0;i<stepTextId.size();i++){
-                    Step s = new Step();
-                    String stepKey = myRef.child(key).child("steps").push().getKey();
-                    TextView  t = findViewById(stepTextId.get(i));
-                    myRef.child(key).child("steps").child(stepKey).child("text").setValue(t.getText().toString());
-                    ImageView imageUri = findViewById(imgStepId.get(i));
-                    FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
-                       @Override
-                       public void onResponse(String url) {
-                           myRef.child(key).child("steps").child(stepKey).child("image").setValue(url);
-                           Log.d("Firebase", "Get value of download url: "+ url);
-                       }
-                   },AddRecipeActivity.this, URIMapping.get(imgStepId.get(i)));
-
-               }
-
+                new UploadRecipe().execute();
             }
         });
 
@@ -264,8 +259,57 @@ public class AddRecipeActivity extends AbstractActivity {
 
             }
         }
+
     }
 
 
+    private class UploadRecipe extends AsyncTask<Void, Void, Void> {
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        protected Void doInBackground(Void... voids) {
+            for (Integer index: ingreId) {
+                TextView t = findViewById(index);
+                ingredients.add(t.getText().toString());
+            }
+            recipe.setName(rename.getText().toString());
+            recipe.setDescription(RecipeDescription.getText().toString());
+            recipe.setPortion(portion.getText().toString());
+            recipe.setDuration(duration.getText().toString());
+            String strDate = dtf.format(LocalDate.now());
+            recipe.setIngredients(ingredients);
+            String key = myRef.push().getKey();
+            myRef.child(key).setValue(recipe);
+            myRef.child(key).child("date").setValue(strDate);
+            myRef.child(key).child("key").setValue(key);
+            myRef.child(key).child("userId").setValue(firebaseUser.getUid());
+            FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
+                @Override
+                public void onResponse(String url) {
+                    myRef.child(key).child("thumbnail").setValue(url);
+                    Log.d("Firebase", "Get value of download url: "+ url);
+                }
+            },AddRecipeActivity.this, URIMapping.get(R.id.RecipeImage));
+            for(int i =0;i<stepTextId.size();i++){
+                Step s = new Step();
+                String stepKey = myRef.child(key).child("steps").push().getKey();
+                TextView  t = findViewById(stepTextId.get(i));
+                myRef.child(key).child("steps").child(stepKey).child("text").setValue(t.getText().toString());
+                ImageView imageUri = findViewById(imgStepId.get(i));
+                FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
+                    @Override
+                    public void onResponse(String url) {
+                        myRef.child(key).child("steps").child(stepKey).child("image").setValue(url);
+                        Log.d("Firebase", "Get value of download url: "+ url);
+                    }
+                },AddRecipeActivity.this, URIMapping.get(imgStepId.get(i)));
 
+            }
+        return  null;
+        }
+        @Override
+        protected void onPostExecute(Void unused) {
+            super.onPostExecute(unused);
+            startActivity(new Intent(AddRecipeActivity.this, ProfileActivity.class));
+        }
+    }
 }
