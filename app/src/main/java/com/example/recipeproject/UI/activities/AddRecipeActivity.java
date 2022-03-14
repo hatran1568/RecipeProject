@@ -11,14 +11,18 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.recipeproject.InterfaceGetData.FirebaseStorageCallback;
 import com.example.recipeproject.R;
@@ -43,6 +47,7 @@ public class AddRecipeActivity extends AbstractActivity {
     EditText rename;
     Recipe recipe;
     Map<Integer,Uri> URIMapping = new HashMap<>();
+    Map<Integer,Boolean> BooleanIMapping = new HashMap<>();
     DateTimeFormatter dtf;
     ImageButton backBtn;
     ArrayList<Integer> stepTextId;
@@ -124,6 +129,7 @@ public class AddRecipeActivity extends AbstractActivity {
         addStepBtn = findViewById(R.id.AddStepButton);
 
         addStep = findViewById(R.id.AddStepLayout);
+        BooleanIMapping.put(R.id.RecipeImage,false);
         addIngreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,6 +190,7 @@ public class AddRecipeActivity extends AbstractActivity {
                 ImageView img = new ImageView(getApplicationContext());
                 img.setImageDrawable(getDrawable(R.drawable.ic_food));
                 img.setId(View.generateViewId());
+                BooleanIMapping.put(img.getId(),false);
                 img.setScaleType(ImageView.ScaleType.FIT_XY);
                 stepTextId.add(newStep.getId());
                 imgStepId.add(img.getId());
@@ -228,13 +235,45 @@ public class AddRecipeActivity extends AbstractActivity {
                 });
             }
         });
-        View btnAdd = findViewById(R.id.AddRecipeButton);
+        Button btnAdd = findViewById(R.id.AddRecipeButton);
+        rename.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(s.toString().trim().length()==0){
+                    btnAdd.setEnabled(false);
+                } else {
+                    btnAdd.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+
+        });
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(ingreId.size() ==0|| stepTextId.size()==0||rename.getText().toString().length()==0){
+                    Toast.makeText(AddRecipeActivity.this,"Please fill ingredients and steps",Toast.LENGTH_LONG).show();
+
+                    return;
+                }
                 Thread thread = new Thread(){
                     @Override
                     public void run() {
+
                         for (Integer index : ingreId) {
                             TextView t = findViewById(index);
                             ingredients.add(t.getText().toString());
@@ -250,27 +289,32 @@ public class AddRecipeActivity extends AbstractActivity {
                         recipe.setKey(key);
 
 
+                        if(BooleanIMapping.get(R.id.RecipeImage)==true) {
 
-                        FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
-                            @Override
-                            public void onResponse(String url) {
-                               recipeRef.child(key).child("thumbnail").setValue(url);
-                                Log.d("Firebase", "Get value of download url: " + url);
-                            }
-                        }, AddRecipeActivity.this, URIMapping.get(R.id.RecipeImage));
+
+                            FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
+                                @Override
+                                public void onResponse(String url) {
+                                    recipeRef.child(key).child("thumbnail").setValue(url);
+                                    Log.d("Firebase", "Get value of download url: " + url);
+                                }
+                            }, AddRecipeActivity.this, URIMapping.get(R.id.RecipeImage));
+                        }
                         for (int i = 0; i < stepTextId.size(); i++) {
                             Step s = new Step();
                             int index=i;
                             TextView t = findViewById(stepTextId.get(i));
                             s.setText(t.getText().toString());
                             ImageView imageUri = findViewById(imgStepId.get(i));
-                            FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
-                                @Override
-                                public void onResponse(String url) {
-                                    recipeRef.child(key).child("steps").child(String.valueOf(index)).child("image").setValue(url);
-                                    Log.d("Firebase", "Get value of download url: " + url);
-                                }
-                            }, AddRecipeActivity.this, URIMapping.get(imgStepId.get(i)));
+                            if(BooleanIMapping.get(imgStepId.get(i))==true) {
+                                FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
+                                    @Override
+                                    public void onResponse(String url) {
+                                        recipeRef.child(key).child("steps").child(String.valueOf(index)).child("image").setValue(url);
+                                        Log.d("Firebase", "Get value of download url: " + url);
+                                    }
+                                }, AddRecipeActivity.this, URIMapping.get(imgStepId.get(i)));
+                            }
                             steps.add(s);
                         }
                         recipe.setSteps(steps);
@@ -292,6 +336,7 @@ public class AddRecipeActivity extends AbstractActivity {
             thread1.run();
     }
        });
+
     }
     private void showImagePicker(int id) {
         Intent intent = new Intent();
@@ -317,17 +362,15 @@ public class AddRecipeActivity extends AbstractActivity {
                     // update the preview image in the layout
                     ImageView imageView = findViewById(requestCode);
                     URIMapping.put(requestCode,selectedImageUri);
+                    BooleanIMapping.put(requestCode,true);
                     imageView.setImageURI(selectedImageUri);
 
             }
         }
 
     }
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    void addRecipe(){
 
 
-    }
 
 
     private class UploadRecipe extends AsyncTask<Void, Void, Void> {
