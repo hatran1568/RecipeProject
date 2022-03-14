@@ -47,8 +47,12 @@
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.121" />
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1205" />
         <entry key="..\:/Users/ACER/Desktop/Android/RecipeProject/app/src/main/res/mipmap-anydpi-v26/launcher.xml" value="0.1205" />
+        <entry key="..\:/Users/ASUS/Documents/GitHub/RecipeProject/app/src/main/res/drawable/delete_btn.xml" value="0.2595" />
+        <entry key="..\:/Users/ASUS/Documents/GitHub/RecipeProject/app/src/main/res/drawable/edit_text_bg.xml" value="0.2595" />
         <entry key="..\:/Users/ASUS/Documents/GitHub/RecipeProject/app/src/main/res/drawable/favorite_off.xml" value="0.1245" />
         <entry key="..\:/Users/ASUS/Documents/GitHub/RecipeProject/app/src/main/res/drawable/favorite_on.xml" value="0.1245" />
+        <entry key="..\:/Users/ASUS/Documents/GitHub/RecipeProject/app/src/main/res/layout/activity_add_recipe.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/ASUS/Documents/GitHub/RecipeProject/app/src/main/res/layout/activity_recipe_detail.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>
