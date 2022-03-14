@@ -26,7 +26,7 @@
         android:id="@+id/detail_step_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="7dp"
         android:layout_marginTop="3dp"
         android:text="TextView"
         android:textSize="16sp"

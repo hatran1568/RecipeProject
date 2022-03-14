@@ -84,8 +84,8 @@ public class StepAdapter  extends RecyclerView.Adapter<StepAdapter.MyView> {
             holder.constraintLayout.addView(imageView);
 
             set.clone(holder.constraintLayout);
-            set.connect(imageView.getId(), ConstraintSet.TOP, holder.stepText.getId(), ConstraintSet.BOTTOM, (int) (5*dpRatio));
-            set.connect(imageView.getId(), ConstraintSet.START, holder.stepText.getId(), ConstraintSet.START, (int) (30*dpRatio));
+            set.connect(imageView.getId(), ConstraintSet.TOP, holder.stepText.getId(), ConstraintSet.BOTTOM, (int) (7*dpRatio));
+            set.connect(imageView.getId(), ConstraintSet.START, holder.stepText.getId(), ConstraintSet.START, (int) (32*dpRatio));
             set.applyTo(holder.constraintLayout);
 
             Picasso.with(mContext).load(step.getImage()).into(imageView);

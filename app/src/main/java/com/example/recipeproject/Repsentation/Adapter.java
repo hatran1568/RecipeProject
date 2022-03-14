@@ -170,7 +170,8 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
         }
 
        holder.recipeDescription.setText(recipe.getDescription());
-       Picasso.with(mContext).load(list.get(position).getThumbnail()).into(holder.recipeImg);
+       if (list.get(position).getThumbnail() != null && !list.get(position).getThumbnail().isEmpty())
+           Picasso.with(mContext).load(list.get(position).getThumbnail()).into(holder.recipeImg);
        holder.card.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {

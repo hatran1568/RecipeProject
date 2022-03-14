@@ -85,7 +85,7 @@ public class RecipeDetail extends AbstractActivity {
                         Picasso.with(mContext).load(user.getImage_link()).into(avatar2);
                     }
                 }, recipe.getUserID());
-                Picasso.with(mContext).load(recipe.getThumbnail()).into(image);
+                if(recipe.getThumbnail()!= null && !recipe.getThumbnail().isEmpty()) Picasso.with(mContext).load(recipe.getThumbnail()).into(image);
                 recipeName.setText(recipe.getName());
                 description.setText(recipe.getDescription());
                 date.setText("On " + formatter.format(recipe.getDate()));

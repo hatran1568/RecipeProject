@@ -35,13 +35,13 @@ public class DataAccess {
                     Recipe recipe = new Recipe();
                     String name = snapshot.child("name").getValue().toString();
                     recipe.setName(name);
-                    String description = snapshot.child("description").getValue().toString();
+                    String description = snapshot.hasChild("description") ? snapshot.child("description").getValue().toString() : "";
                     recipe.setDescription(description);
-                    String duration = snapshot.child("duration").getValue().toString();
+                    String duration = snapshot.hasChild("duration") ? snapshot.child("duration").getValue().toString() :"";
                     recipe.setDuration(duration);
-                    String portion = snapshot.child("portion").getValue().toString();
+                    String portion = snapshot.hasChild("portion")? snapshot.child("portion").getValue().toString():"";
                     recipe.setPortion(portion);
-                    String thumbnail = snapshot.child("thumbnail").getValue().toString();
+                    String thumbnail = snapshot.hasChild("thumbnail")? snapshot.child("thumbnail").getValue().toString():"";
                     recipe.setThumbnail(thumbnail);
                     String userId = snapshot.child("userId").getValue().toString();
                     recipe.setUserID(userId);
@@ -90,13 +90,13 @@ public class DataAccess {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String name = snapshot.child("name").getValue().toString();
                 recipe.setName(name);
-                String description = snapshot.child("description").getValue().toString();
+                String description = snapshot.hasChild("description") ? snapshot.child("description").getValue().toString() : "";
                 recipe.setDescription(description);
-                String duration = snapshot.child("duration").getValue().toString();
+                String duration = snapshot.hasChild("duration") ? snapshot.child("duration").getValue().toString() :"";
                 recipe.setDuration(duration);
-                String portion = snapshot.child("portion").getValue().toString();
+                String portion = snapshot.hasChild("portion")? snapshot.child("portion").getValue().toString():"";
                 recipe.setPortion(portion);
-                String thumbnail = snapshot.child("thumbnail").getValue().toString();
+                String thumbnail = snapshot.hasChild("thumbnail")? snapshot.child("thumbnail").getValue().toString():"";
                 recipe.setThumbnail(thumbnail);
                 String userId = snapshot.child("userId").getValue().toString();
                 recipe.setUserID(userId);
