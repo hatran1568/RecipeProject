@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -23,6 +24,8 @@ import com.example.recipeproject.R;
 import com.example.recipeproject.Repsentation.StepAdapter;
 import com.example.recipeproject.model.Recipe;
 import com.example.recipeproject.model.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -34,6 +37,7 @@ public class RecipeDetail extends AbstractActivity {
     RecyclerView.LayoutManager RecyclerViewLayoutManager;
     //private Recipe recipe;
     private int recipeId;
+    ImageButton editBtn, deleteBtn;
     TextView recipeName;
     ImageView image;
     ImageView avatar1;
@@ -107,6 +111,21 @@ public class RecipeDetail extends AbstractActivity {
                         = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
                 recyclerSteps.setLayoutManager(verticalLayout);
                 recyclerSteps.setAdapter(stepAdapter);
+
+
+                //Button controls
+                    //Get Logged in user.
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String currentUserId = null;
+                if (user != null){
+                    currentUserId = user.getUid();
+                }
+                editBtn = findViewById(R.id.editBtn);
+                deleteBtn = findViewById(R.id.deleteBtn);
+                if (!recipe.getUserID().equals(currentUserId)){
+                    editBtn.setVisibility(View.INVISIBLE);
+                    deleteBtn.setVisibility(View.INVISIBLE);
+                }
 
             }
         }, recipeId);
