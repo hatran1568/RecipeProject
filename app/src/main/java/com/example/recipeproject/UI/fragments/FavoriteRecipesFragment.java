@@ -106,7 +106,6 @@ public class FavoriteRecipesFragment extends Fragment {
             public void onResponse(ArrayList<Recipe> recipes) {
 
                 GetDataToRecyclerView(recipes);
-                GetDataToRecyclerView(recipes);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
