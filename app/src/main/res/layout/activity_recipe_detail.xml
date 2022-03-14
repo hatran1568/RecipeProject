@@ -243,15 +243,31 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" >
+                <ImageButton
+                    android:id="@+id/detail_backButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/car_ui_icon_arrow_back"
+
+                    tools:layout_editor_absoluteX="17dp"
+                    tools:layout_editor_absoluteY="6dp" />
+                <ImageButton
+                    android:id="@+id/detail_deleteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/delete_btn" />
+            </androidx.appcompat.widget.Toolbar>
 
             <ImageButton
                 android:id="@+id/deleteBtn"
                 android:layout_width="58dp"
                 android:layout_height="63dp"
                 android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
 
+                android:scaleType="fitCenter"
                 app:layout_constraintBottom_toTopOf="@+id/detail_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.954"

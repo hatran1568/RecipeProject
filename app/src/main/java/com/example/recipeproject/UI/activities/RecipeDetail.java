@@ -49,17 +49,25 @@ public class RecipeDetail extends AbstractActivity {
     SimpleDateFormat formatter;
     ListView listIngredients;
     RecyclerView recyclerSteps;
+    ImageButton backButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
         mContext = getApplicationContext();
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar2);
-        setSupportActionBar(myToolbar);
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+//        setSupportActionBar(myToolbar);
+//        if (getSupportActionBar() != null){
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        }
+        backButton = findViewById(R.id.detail_backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         formatter = new SimpleDateFormat("d MMM yyyy");
         image = findViewById(R.id.detail_recipe_img);
         recipeName = findViewById(R.id.detail_recipe_name);
