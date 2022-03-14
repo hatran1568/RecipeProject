@@ -25,7 +25,7 @@ import com.example.recipeproject.UI.activities.RecipeDetail;
 import com.example.recipeproject.listener.SelectListener;
 import com.example.recipeproject.model.Recipe;
 import com.example.recipeproject.model.Step;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -152,6 +152,7 @@ public class FavoriteRecipesFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
 
         FavoriteRecipeAdapter adapter = new FavoriteRecipeAdapter(recipes, getContext(), getActivity(), new SelectListener() {
+
             @Override
             public void onItemClick(Recipe recipe) {
                 Intent intent = new Intent(getContext(), RecipeDetail.class);
@@ -161,6 +162,7 @@ public class FavoriteRecipesFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        adapter.notifyDataSetChanged();
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
     }

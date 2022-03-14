@@ -74,7 +74,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private TabLayout tabLayout;
-    private ViewPager viewPager2;
+    private ViewPager2 viewPager2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,13 +124,25 @@ public class UserProfileFragment extends Fragment {
         tabLayout = rootview.findViewById(R.id.tabLayout);
         viewPager2 = rootview.findViewById(R.id.viewPager);
 
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this.getActivity());
         adapter.addFragment(new FavoriteRecipesFragment(), "Favorites");
         adapter.addFragment(new MyRecipeFragment(), "My recipes");
+
         viewPager2.setAdapter(adapter);
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager2));
-        viewPager2.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                switch (position){
+                    case 0:
+                        tab.setText("Favorites");
+                        break;
+                    case 1:
+                        tab.setText("My recipes");
+                        break;
+                }
+            }
+        }).attach();
 
         return rootview;
     }

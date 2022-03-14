@@ -28,8 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
         android:background="#00FFFFFF"
-        android:paddingBottom="210dp"
         android:clipToPadding="false"
+        android:paddingBottom="210dp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.484"

@@ -70,7 +70,7 @@
         app:layout_constraintTop_toTopOf="@+id/userAvatar"
         app:layout_constraintVertical_bias="0.202" />
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="0dp"
         android:layout_height="0dp"
