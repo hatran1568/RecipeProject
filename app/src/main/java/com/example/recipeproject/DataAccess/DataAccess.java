@@ -45,7 +45,8 @@ public class DataAccess {
                     recipe.setThumbnail(thumbnail);
                     String userId = snapshot.child("userId").getValue().toString();
                     recipe.setUserID(userId);
-
+                    String key = snapshot.getKey();
+                    recipe.setKey(key);
 
                     int id = Integer.parseInt(snapshot.child("id").getValue().toString());
                     recipe.setId(id);
@@ -100,6 +101,8 @@ public class DataAccess {
                 recipe.setThumbnail(thumbnail);
                 String userId = snapshot.child("userId").getValue().toString();
                 recipe.setUserID(userId);
+                String key = snapshot.getKey();
+                recipe.setKey(key);
 
                 int id = Integer.parseInt(snapshot.child("id").getValue().toString());
                 recipe.setId(id);
@@ -213,6 +216,8 @@ public class DataAccess {
                     recipe.setUserID(userId);
                     int id = Integer.parseInt(snapshot.child("id").getValue().toString());
                     recipe.setId(id);
+                    String key = snapshot.getKey();
+                    recipe.setKey(key);
 
                     ArrayList<Step> steps = new ArrayList<>();
                     for (DataSnapshot dataSnapshot: snapshot.child("steps").getChildren()
@@ -266,6 +271,8 @@ public class DataAccess {
                         recipe.setUserID(userId);
                         int id = Integer.parseInt(snapshot.child("id").getValue().toString());
                         recipe.setId(id);
+                        String key = snapshot.getKey();
+                        recipe.setKey(key);
 
                         ArrayList<Step> steps = new ArrayList<>();
                         for (DataSnapshot dataSnapshot: snapshot.child("steps").getChildren()
@@ -319,6 +326,8 @@ public class DataAccess {
                         recipe.setUserID(userId);
                         int id = Integer.parseInt(snapshot.child("id").getValue().toString());
                         recipe.setId(id);
+                        String key = snapshot.getKey();
+                        recipe.setKey(key);
 
                         ArrayList<Step> steps = new ArrayList<>();
                         for (DataSnapshot dataSnapshot: snapshot.child("steps").getChildren()
