@@ -21,7 +21,6 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
 
 
     public void addFragment(Fragment fragment, String title){
-
         fragmentArrayList.add(fragment);
         fragmentTitle.add(title);
     }

@@ -18,6 +18,7 @@ import android.widget.SearchView;
 
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.FirebaseCallback;
+import com.example.recipeproject.InterfaceGetData.getRecipeCallback;
 import com.example.recipeproject.R;
 import com.example.recipeproject.Repsentation.Adapter;
 import com.example.recipeproject.Repsentation.FavoriteRecipeAdapter;
@@ -100,8 +101,62 @@ public class FavoriteRecipesFragment extends Fragment {
         searchView = rootView.findViewById(R.id.searchView);
         recyclerView = rootView.findViewById(R.id.recyclerviewNewest);
 
-        DataAccess.getFavoritesRecipe(
-                new FirebaseCallback() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("user").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("favorites");
+        ArrayList<String> favoriteIds = new ArrayList<>();
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot child: snapshot.getChildren()){
+                    favoriteIds.add(child.getKey());
+                }
+                for(String id: favoriteIds){
+                    DataAccess.getRecipeById(new getRecipeCallback() {
+                        @Override
+                        public void onResponse(Recipe recipe) {
+                            favoriteRecipes.add(recipe);
+                        }
+                    }, id);
+                }
+                GetDataToRecyclerView(favoriteRecipes);
+
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        ArrayList<Recipe> searchedRecipes = new ArrayList<>();
+                        for (Recipe object : favoriteRecipes)
+                            if (object.getName().toUpperCase()
+                                    .contains(query.toUpperCase()))
+                                searchedRecipes.add(object);
+                        //Searched Recycler View
+
+                        GetDataToRecyclerView(searchedRecipes);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        ArrayList<Recipe> searchedRecipes = new ArrayList<>();
+                        for (Recipe object : favoriteRecipes)
+                            if (object.getName().toUpperCase()
+                                    .contains(newText.toUpperCase()))
+                                searchedRecipes.add(object);
+                        //Searched Recycler View
+
+                        GetDataToRecyclerView(searchedRecipes);
+                        return true;
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        /*DataAccess.getFavoritesRecipe(new FirebaseCallback() {
             @Override
             public void onResponse(ArrayList<Recipe> recipes) {
 
@@ -135,7 +190,7 @@ public class FavoriteRecipesFragment extends Fragment {
                     }
                 });
             }
-        }, FirebaseAuth.getInstance().getCurrentUser().getUid());
+        }, FirebaseAuth.getInstance().getCurrentUser().getUid());*/
 
 
         // Inflate the layout for this fragment
