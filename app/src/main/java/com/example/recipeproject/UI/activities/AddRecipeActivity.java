@@ -29,11 +29,14 @@ import com.example.recipeproject.utils.PermissionHelper;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import static java.util.concurrent.CompletableFuture.allOf;
+import static java.util.concurrent.CompletableFuture.runAsync;
 
 public class AddRecipeActivity extends AbstractActivity {
     final int PICKER_REQUEST_CODE =100;
@@ -56,6 +59,7 @@ public class AddRecipeActivity extends AbstractActivity {
     View addIngreBtn;
     View addStepBtn;
     LinearLayout addStep;
+    DatabaseReference recipeRef;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,15 +85,15 @@ public class AddRecipeActivity extends AbstractActivity {
                         android.Manifest.permission.WRITE_EXTERNAL_STORAGE
                 };
                 // Check user permission
-                if(PermissionHelper.hasPermissions(AddRecipeActivity.this, PERMISSIONS)){
+                if (PermissionHelper.hasPermissions(AddRecipeActivity.this, PERMISSIONS)) {
                     showImagePicker(R.id.RecipeImage);
-                }else{
+                } else {
                     ActivityCompat.requestPermissions(AddRecipeActivity.this, PERMISSIONS, PICKER_REQUEST_CODE);
                 }
             }
 
         });
-         rename= findViewById(R.id.RecipeName);
+        rename = findViewById(R.id.RecipeName);
 
         stepTextId = new ArrayList<>();
 
@@ -104,6 +108,8 @@ public class AddRecipeActivity extends AbstractActivity {
         database = FirebaseDatabase.getInstance();
 
         myRef = database.getReference().child("test");
+
+        recipeRef = database.getReference().child("recipe");
 
         ingreId = new ArrayList<>();
 
@@ -123,13 +129,13 @@ public class AddRecipeActivity extends AbstractActivity {
             public void onClick(View view) {
 
                 ConstraintLayout ctrlayout = new ConstraintLayout(getApplicationContext());
-                ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,ConstraintLayout.LayoutParams.WRAP_CONTENT);
-                int marg= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,20,getResources().getDisplayMetrics());
-                layoutParams.setMargins(0, marg, marg, marg/2);
+                ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+                int marg = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+                layoutParams.setMargins(0, marg, marg, marg / 2);
                 ctrlayout.setLayoutParams(layoutParams);
                 EditText newIngre = new EditText(getApplicationContext());
-                newIngre.setHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,50,getResources().getDisplayMetrics()));
-                newIngre.setWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,300,getResources().getDisplayMetrics()));
+                newIngre.setHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()));
+                newIngre.setWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics()));
                 newIngre.setId(View.generateViewId());
                 newIngre.setBackgroundResource(R.drawable.edit_text_border);
                 ImageButton btn = new ImageButton(getApplicationContext());
@@ -141,9 +147,9 @@ public class AddRecipeActivity extends AbstractActivity {
                 ctrlayout.addView(newIngre);
                 ctrlayout.addView(btn);
                 set.clone(ctrlayout);
-                set.constrainWidth(btn.getId(),(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,56,getResources().getDisplayMetrics()));
-                set.constrainHeight(btn.getId(),(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,50,getResources().getDisplayMetrics()));
-                set.connect(btn.getId(),ConstraintSet.RIGHT,set.PARENT_ID,ConstraintSet.RIGHT) ;
+                set.constrainWidth(btn.getId(), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics()));
+                set.constrainHeight(btn.getId(), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()));
+                set.connect(btn.getId(), ConstraintSet.RIGHT, set.PARENT_ID, ConstraintSet.RIGHT);
                 set.applyTo(ctrlayout);
                 addIngre.addView(ctrlayout);
                 btn.setOnClickListener(new View.OnClickListener() {
@@ -162,13 +168,13 @@ public class AddRecipeActivity extends AbstractActivity {
             @Override
             public void onClick(View view) {
                 ConstraintLayout ctrlayout = new ConstraintLayout(getApplicationContext());
-                ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,ConstraintLayout.LayoutParams.WRAP_CONTENT);
-                int marg= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,20,getResources().getDisplayMetrics());
-                layoutParams.setMargins(0, marg, marg, marg/2);
+                ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+                int marg = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+                layoutParams.setMargins(0, marg, marg, marg / 2);
                 ctrlayout.setLayoutParams(layoutParams);
                 EditText newStep = new EditText(getApplicationContext());
-                newStep.setHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,50,getResources().getDisplayMetrics()));
-                newStep.setWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,300,getResources().getDisplayMetrics()));
+                newStep.setHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()));
+                newStep.setWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics()));
                 newStep.setId(View.generateViewId());
                 newStep.setBackgroundResource(R.drawable.edit_text_border);
                 ImageButton btn = new ImageButton(getApplicationContext());
@@ -190,9 +196,9 @@ public class AddRecipeActivity extends AbstractActivity {
                                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE
                         };
                         // Check user permission
-                        if(PermissionHelper.hasPermissions(AddRecipeActivity.this, PERMISSIONS)){
+                        if (PermissionHelper.hasPermissions(AddRecipeActivity.this, PERMISSIONS)) {
                             showImagePicker(img.getId());
-                        }else{
+                        } else {
                             ActivityCompat.requestPermissions(AddRecipeActivity.this, PERMISSIONS, PICKER_REQUEST_CODE);
                         }
                     }
@@ -201,14 +207,14 @@ public class AddRecipeActivity extends AbstractActivity {
                 ctrlayout.addView(btn);
                 ctrlayout.addView(img);
                 set.clone(ctrlayout);
-                set.constrainHeight(img.getId(),(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,100,getResources().getDisplayMetrics()));
-                set.constrainWidth(img.getId(),(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,180,getResources().getDisplayMetrics()));
-                set.connect(img.getId(),ConstraintSet.TOP,newStep.getId(),ConstraintSet.BOTTOM,15);
-                set.connect(img.getId(),ConstraintSet.LEFT,set.PARENT_ID,ConstraintSet.LEFT,15);
+                set.constrainHeight(img.getId(), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics()));
+                set.constrainWidth(img.getId(), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 180, getResources().getDisplayMetrics()));
+                set.connect(img.getId(), ConstraintSet.TOP, newStep.getId(), ConstraintSet.BOTTOM, 15);
+                set.connect(img.getId(), ConstraintSet.LEFT, set.PARENT_ID, ConstraintSet.LEFT, 15);
 
-                set.constrainWidth(btn.getId(),(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,56,getResources().getDisplayMetrics()));
-                set.constrainHeight(btn.getId(),(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,50,getResources().getDisplayMetrics()));
-                set.connect(btn.getId(),ConstraintSet.RIGHT,set.PARENT_ID,ConstraintSet.RIGHT) ;
+                set.constrainWidth(btn.getId(), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics()));
+                set.constrainHeight(btn.getId(), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()));
+                set.connect(btn.getId(), ConstraintSet.RIGHT, set.PARENT_ID, ConstraintSet.RIGHT);
                 set.applyTo(ctrlayout);
 
                 addStep.addView(ctrlayout);
@@ -226,10 +232,22 @@ public class AddRecipeActivity extends AbstractActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new UploadRecipe().execute();
+                Thread thread = new Thread(){
+                    @Override
+                    public void run() {
+                        addRecipe();
+                    }
+                };
+                thread.run();
+            Thread thread1 = new Thread(){
+                @Override
+                public void run() {
+                    startActivity(new Intent(AddRecipeActivity.this, ProfileActivity.class));
+                }
+            }  ;
+            thread1.run();
             }
         });
-
     }
     private void showImagePicker(int id) {
         Intent intent = new Intent();
@@ -261,49 +279,63 @@ public class AddRecipeActivity extends AbstractActivity {
         }
 
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    void addRecipe(){
+        for (Integer index : ingreId) {
+            TextView t = findViewById(index);
+            ingredients.add(t.getText().toString());
+        }
+        recipe.setName(rename.getText().toString());
+        recipe.setDescription(RecipeDescription.getText().toString());
+        recipe.setPortion(portion.getText().toString());
+        recipe.setDuration(duration.getText().toString());
+        String strDate = dtf.format(LocalDate.now());
+        recipe.setIngredients(ingredients);
+        String key = myRef.push().getKey();
+        recipe.setUserID(firebaseUser.getUid());
+        recipe.setKey(key);
+
+
+
+        FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
+            @Override
+            public void onResponse(String url) {
+                recipe.setThumbnail(url);
+                Log.d("Firebase", "Get value of download url: " + url);
+            }
+        }, AddRecipeActivity.this, URIMapping.get(R.id.RecipeImage));
+        for (int i = 0; i < stepTextId.size(); i++) {
+            Step s = new Step();
+
+            TextView t = findViewById(stepTextId.get(i));
+            s.setText(t.getText().toString());
+            ImageView imageUri = findViewById(imgStepId.get(i));
+            FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
+                @Override
+                public void onResponse(String url) {
+                    s.setImage(url);
+                    Log.d("Firebase", "Get value of download url: " + url);
+                }
+            }, AddRecipeActivity.this, URIMapping.get(imgStepId.get(i)));
+            steps.add(s);
+        }
+        recipe.setSteps(steps);
+
+        recipe.setStrdate(dtf.format(LocalDate.now()));
+
+        recipeRef.child(key).setValue(recipe);
+
+        recipeRef.child(key).child("date").setValue(strDate);
+
+    }
 
 
     private class UploadRecipe extends AsyncTask<Void, Void, Void> {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         protected Void doInBackground(Void... voids) {
-            for (Integer index: ingreId) {
-                TextView t = findViewById(index);
-                ingredients.add(t.getText().toString());
-            }
-            recipe.setName(rename.getText().toString());
-            recipe.setDescription(RecipeDescription.getText().toString());
-            recipe.setPortion(portion.getText().toString());
-            recipe.setDuration(duration.getText().toString());
-            String strDate = dtf.format(LocalDate.now());
-            recipe.setIngredients(ingredients);
-            String key = myRef.push().getKey();
-            myRef.child(key).setValue(recipe);
-            myRef.child(key).child("date").setValue(strDate);
-            myRef.child(key).child("key").setValue(key);
-            myRef.child(key).child("userId").setValue(firebaseUser.getUid());
-            FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
-                @Override
-                public void onResponse(String url) {
-                    myRef.child(key).child("thumbnail").setValue(url);
-                    Log.d("Firebase", "Get value of download url: "+ url);
-                }
-            },AddRecipeActivity.this, URIMapping.get(R.id.RecipeImage));
-            for(int i =0;i<stepTextId.size();i++){
-                Step s = new Step();
-                String stepKey = myRef.child(key).child("steps").push().getKey();
-                TextView  t = findViewById(stepTextId.get(i));
-                myRef.child(key).child("steps").child(stepKey).child("text").setValue(t.getText().toString());
-                ImageView imageUri = findViewById(imgStepId.get(i));
-                FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
-                    @Override
-                    public void onResponse(String url) {
-                        myRef.child(key).child("steps").child(stepKey).child("image").setValue(url);
-                        Log.d("Firebase", "Get value of download url: "+ url);
-                    }
-                },AddRecipeActivity.this, URIMapping.get(imgStepId.get(i)));
 
-            }
+
         return  null;
         }
         @Override
@@ -313,3 +345,5 @@ public class AddRecipeActivity extends AbstractActivity {
         }
     }
 }
+
+

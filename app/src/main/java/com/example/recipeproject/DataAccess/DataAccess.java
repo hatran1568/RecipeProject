@@ -43,8 +43,11 @@ public class DataAccess {
                     recipe.setPortion(portion);
                     String thumbnail = snapshot.hasChild("thumbnail")? snapshot.child("thumbnail").getValue().toString():"";
                     recipe.setThumbnail(thumbnail);
-                    String userId = snapshot.child("userId").getValue().toString();
-                    recipe.setUserID(userId);
+                    Object userId = snapshot.child("userId").getValue();
+                    if(userId == null)
+                        userId = snapshot.child("userID").getValue();
+
+                    recipe.setUserID(userId.toString());
 
 
                     int id = Integer.parseInt(snapshot.child("id").getValue().toString());
@@ -64,8 +67,10 @@ public class DataAccess {
                         ingredients.add(dataSnapshot.getValue().toString());
                     }
                     recipe.setIngredients(ingredients);
-                    Date date = Date.valueOf(snapshot.child("date").getValue().toString());
-                    recipe.setDate(date);
+                    Object date = snapshot.child("date").getValue();
+                    if(date == null)
+                        date =snapshot.child("strdate").getValue();
+                    recipe.setDate(Date.valueOf(date.toString()));
                     recipes.add(recipe);
                 }
 

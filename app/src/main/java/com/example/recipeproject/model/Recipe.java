@@ -4,6 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Recipe {
+    public String getStrdate() {
+        return strdate;
+    }
+
+    public void setStrdate(String strdate) {
+        this.strdate = strdate;
+    }
+
+    private  String strdate;
     private String description;
     private String duration;
     private int id;
@@ -12,7 +21,7 @@ public class Recipe {
     private ArrayList<Step> steps;
     private ArrayList<String> ingredients;
     private String thumbnail;
-    private String userID;
+    private String userId;
     private Date date;
     private User user;
     private String key;
@@ -109,11 +118,11 @@ public class Recipe {
     }
 
     public String getUserID() {
-        return userID;
+        return userId;
     }
 
     public void setUserID(String userID) {
-        this.userID = userID;
+        this.userId = userID;
     }
 
     @Override
@@ -127,7 +136,7 @@ public class Recipe {
                 ", steps=" + steps +
                 ", ingredients=" + ingredients +
                 ", thumbnail='" + thumbnail + '\'' +
-                ", userID=" + userID +
+                ", userID=" + userId +
                 "date=" + getDate().toString()+
                 '}';
     }
