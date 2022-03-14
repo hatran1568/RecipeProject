@@ -125,21 +125,7 @@ public class Recipe {
         this.userId = userID;
     }
 
-    @Override
-    public String toString() {
-        return "Recipe{" +
-                "description='" + description + '\'' +
-                ", duration='" + duration + '\'' +
-                ", id=" + id +
-                ", name='" + name + '\'' +
-                ", portion='" + portion + '\'' +
-                ", steps=" + steps +
-                ", ingredients=" + ingredients +
-                ", thumbnail='" + thumbnail + '\'' +
-                ", userID=" + userId +
-                "date=" + getDate().toString()+
-                '}';
-    }
+
     public void cloneRecipe(Recipe r){
         setId(r.getId());
         setDescription(r.getDescription());
