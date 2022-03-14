@@ -33,8 +33,9 @@
             android:exported="false" />
         <activity
             android:name=".UI.activities.ProfileActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustPan" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
         <activity
             android:name=".UI.activities.HomeActivity"
             android:exported="true">
@@ -49,7 +50,9 @@
             android:exported="true" />
         <activity
             android:name=".UI.activities.AddRecipeActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".UI.activities.HomePage"
             android:exported="true" />

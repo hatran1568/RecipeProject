@@ -3,6 +3,8 @@ package com.example.recipeproject.UI.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -84,54 +86,51 @@ public class FavoriteRecipesFragment extends Fragment {
         searchView = rootView.findViewById(R.id.searchView);
         recyclerView = rootView.findViewById(R.id.recyclerviewNewest);
 
-        DataAccess.getFavoritesRecipe(new FirebaseCallback() {
-            @Override
-            public void onResponse(ArrayList<Recipe> recipes) {
-                GetDataToRecyclerView(recipes);
-            }
-        }, FirebaseAuth.getInstance().getCurrentUser().getUid(), null);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                DataAccess.getFavoritesRecipe(new FirebaseCallback() {
-                    @Override
-                    public void onResponse(ArrayList<Recipe> recipes) {
-                        GetDataToRecyclerView(recipes);
-                    }
-                }, FirebaseAuth.getInstance().getCurrentUser().getUid(), s);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-
-                return true;
-            }
-        });
-
         /*DataAccess.getFavoritesRecipe(new FirebaseCallback() {
             @Override
             public void onResponse(ArrayList<Recipe> recipes) {
+
+                GetDataToRecyclerView(recipes);
+
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
-                    public boolean onQueryTextSubmit(String s) {
-                        return false;
+                    public boolean onQueryTextSubmit(String query) {
+                        ArrayList<Recipe> searchedRecipes = new ArrayList<>();
+                        for (Recipe object : recipes)
+                            if (object.getName().toUpperCase()
+                                    .contains(query.toUpperCase()))
+                                searchedRecipes.add(object);
+                        //Searched Recycler View
+
+                        GetDataToRecyclerView(searchedRecipes);
+                        return true;
                     }
 
                     @Override
-                    public boolean onQueryTextChange(String s) {
-                        for (Recipe recipe: recipes){
+                    public boolean onQueryTextChange(String newText) {
+                        ArrayList<Recipe> searchedRecipes = new ArrayList<>();
+                        for (Recipe object : recipes)
+                            if (object.getName().toUpperCase()
+                                    .contains(newText.toUpperCase()))
+                                searchedRecipes.add(object);
+                        //Searched Recycler View
 
-                        }
-                        return false;
+                        GetDataToRecyclerView(searchedRecipes);
+                        return true;
                     }
                 });
             }
-        }, FirebaseAuth.getInstance().getCurrentUser().getUid(), null);*/
+        }, FirebaseAuth.getInstance().getCurrentUser().getUid());*/
 
         // Inflate the layout for this fragment
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
     }
 
     private void GetDataToRecyclerView(ArrayList<Recipe> recipes) {
