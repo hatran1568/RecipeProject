@@ -34,7 +34,7 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
     private Context mContext;
     private Activity mActivity;
     private SelectListener listener;
-    DatabaseReference databaseRef, favRef, favListRef, favoriteRef;
+    DatabaseReference databaseRef, favRef, favListRef;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     Boolean favChecker = false;
     public class MyView extends  RecyclerView.ViewHolder {
@@ -60,19 +60,18 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
            favBtn = view.findViewById(R.id.favBtn);
         }
 
-
+        //Check or uncheck the Favorite button
         public void favoriteChecker(Recipe recipe) {
             favBtn = itemView.findViewById(R.id.favBtn);
-            favoriteRef = database.getReference("user");
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             String currentUserId = null;
             if (user != null){
                 currentUserId = user.getUid();
             }
             String finalCurrentUserId = currentUserId;
-            final String recipeKey = String.valueOf(recipe.getId());
+            final String recipeKey = recipe.getKey();
 
-            favoriteRef.addValueEventListener(new ValueEventListener() {
+            favRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.child(finalCurrentUserId).child("favorites").hasChild(recipeKey)){
@@ -108,8 +107,7 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
                         parent,
                         false);
 
-        // return itemView
-
+        //Get the path to user in db
         favRef = database.getReference("user");
         return new MyView(itemView);
     }
@@ -125,9 +123,7 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
         }
 
         Recipe recipe = list.get(position);
-        final String recipeKey = String.valueOf(recipe.getId());
-
-
+        final String recipeKey = recipe.getKey();
 
        holder.recipeName.setText(recipe.getName());
         DataAccess.getUserById(new getUserCallback() {
