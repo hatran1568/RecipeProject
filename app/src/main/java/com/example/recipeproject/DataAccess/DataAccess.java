@@ -323,23 +323,29 @@ public class DataAccess {
                                 DataSnapshot snapshot= task.getResult();
                                 String name = snapshot.child("name").getValue().toString();
                                 recipe.setName(name);
-                                String description = snapshot.child("description").getValue().toString();
+                                String description = snapshot.hasChild("description") ? snapshot.child("description").getValue().toString() : "";
                                 recipe.setDescription(description);
-                                String duration = snapshot.child("duration").getValue().toString();
+                                String duration = snapshot.hasChild("duration") ? snapshot.child("duration").getValue().toString() :"";
                                 recipe.setDuration(duration);
-                                String portion = snapshot.child("portion").getValue().toString();
+                                String portion = snapshot.hasChild("portion")? snapshot.child("portion").getValue().toString():"";
                                 recipe.setPortion(portion);
-                                String thumbnail = snapshot.child("thumbnail").getValue().toString();
+                                String thumbnail = snapshot.hasChild("thumbnail")? snapshot.child("thumbnail").getValue().toString():"";
                                 recipe.setThumbnail(thumbnail);
-                                String userId = snapshot.child("userId").getValue().toString();
-                                recipe.setUserID(userId);
-                                int id = Integer.parseInt(snapshot.child("id").getValue().toString());
-                                recipe.setId(id);
+                                Object userId = snapshot.child("userId").getValue();
+                                if(userId == null)
+                                    userId = snapshot.child("userID").getValue();
+
+                                recipe.setUserID(userId.toString());
+
                                 String key = snapshot.getKey();
                                 recipe.setKey(key);
 
+                                //recipe.setKey(id);
+                                //int id = Integer.parseInt(snapshot.child("id").getValue().toString());
+                                //recipe.setId(id);
+
                                 ArrayList<Step> steps = new ArrayList<>();
-                                for (DataSnapshot dataSnapshot: snapshot.child("steps").getChildren()
+                                for (DataSnapshot dataSnapshot : snapshot.child("steps").getChildren()
                                 ) {
                                     Step step = dataSnapshot.getValue(Step.class);
                                     steps.add(step);
@@ -347,13 +353,16 @@ public class DataAccess {
                                 recipe.setSteps(steps);
 
                                 ArrayList<String> ingredients = new ArrayList<>();
-                                for (DataSnapshot dataSnapshot: snapshot.child("ingredients").getChildren()
+                                for (DataSnapshot dataSnapshot : snapshot.child("ingredients").getChildren()
                                 ) {
-                                    ingredients.add(dataSnapshot.getValue().toString());
+                                    String ingredient = dataSnapshot.getValue().toString();
+                                    ingredients.add(ingredient);
                                 }
                                 recipe.setIngredients(ingredients);
-                                Date date = Date.valueOf(snapshot.child("date").getValue().toString());
-                                recipe.setDate(date);
+                                Object date = snapshot.child("date").getValue();
+                                if(date == null)
+                                    date =snapshot.child("strdate").getValue();
+                                recipe.setDate(Date.valueOf(date.toString()));
 
                             } else {
 
