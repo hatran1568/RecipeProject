@@ -15,6 +15,7 @@ import android.widget.SearchView;
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.FirebaseCallback;
 import com.example.recipeproject.R;
+import com.example.recipeproject.Repsentation.Adapter;
 import com.example.recipeproject.Repsentation.FavoriteRecipeAdapter;
 import com.example.recipeproject.UI.activities.RecipeDetail;
 import com.example.recipeproject.listener.SelectListener;
@@ -77,7 +78,7 @@ public class MyRecipeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_favorite_recipes, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_my_recipe, container, false);
 
         searchView = rootView.findViewById(R.id.searchView);
         recyclerView = rootView.findViewById(R.id.recyclerviewNewest);
@@ -123,7 +124,7 @@ public class MyRecipeFragment extends Fragment {
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
 
-        FavoriteRecipeAdapter adapter = new FavoriteRecipeAdapter(recipes, getContext(), getActivity(), new SelectListener() {
+        Adapter adapter = new Adapter(recipes, getContext(), getActivity(), new SelectListener() {
 
             @Override
             public void onItemClick(Recipe recipe) {
