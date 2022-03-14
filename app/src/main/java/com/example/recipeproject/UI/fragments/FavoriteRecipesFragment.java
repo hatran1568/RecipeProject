@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,11 +46,12 @@ import java.util.StringTokenizer;
  * Use the {@link FavoriteRecipesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FavoriteRecipesFragment extends Fragment {
+public class FavoriteRecipesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private RecyclerView recyclerView;
     private ArrayList<Recipe> favoriteRecipes = new ArrayList<>();
     private SearchView searchView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     FavoriteRecipeAdapter adapter;
 
@@ -100,6 +102,8 @@ public class FavoriteRecipesFragment extends Fragment {
 
         searchView = rootView.findViewById(R.id.searchView);
         recyclerView = rootView.findViewById(R.id.recyclerviewNewest);
+        swipeRefreshLayout = rootView.findViewById(R.id.swipeContainer);
+        swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("user").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("favorites");
@@ -119,7 +123,13 @@ public class FavoriteRecipesFragment extends Fragment {
                         }
                     }, id);
                 }
-                GetDataToRecyclerView(favoriteRecipes);
+                swipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        GetDataToRecyclerView(favoriteRecipes);
+                    }
+                });
+                //GetDataToRecyclerView(favoriteRecipes);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
@@ -154,53 +164,16 @@ public class FavoriteRecipesFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+
         });
 
-        /*DataAccess.getFavoritesRecipe(new FirebaseCallback() {
-            @Override
-            public void onResponse(ArrayList<Recipe> recipes) {
 
-                GetDataToRecyclerView(recipes);
-
-                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        ArrayList<Recipe> searchedRecipes = new ArrayList<>();
-                        for (Recipe object : recipes)
-                            if (object.getName().toUpperCase()
-                                    .contains(query.toUpperCase()))
-                                searchedRecipes.add(object);
-                        //Searched Recycler View
-
-                        GetDataToRecyclerView(searchedRecipes);
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        ArrayList<Recipe> searchedRecipes = new ArrayList<>();
-                        for (Recipe object : recipes)
-                            if (object.getName().toUpperCase()
-                                    .contains(newText.toUpperCase()))
-                                searchedRecipes.add(object);
-                        //Searched Recycler View
-
-                        GetDataToRecyclerView(searchedRecipes);
-                        return true;
-                    }
-                });
-            }
-        }, FirebaseAuth.getInstance().getCurrentUser().getUid());*/
 
 
         // Inflate the layout for this fragment
         return rootView;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
 
     private void GetDataToRecyclerView(ArrayList<Recipe> recipes) {
 
@@ -220,5 +193,11 @@ public class FavoriteRecipesFragment extends Fragment {
         adapter.notifyDataSetChanged();
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onRefresh() {
+        GetDataToRecyclerView(favoriteRecipes);
+        swipeRefreshLayout.setRefreshing(false);
     }
 }
