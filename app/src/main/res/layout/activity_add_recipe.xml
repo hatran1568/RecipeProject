@@ -52,7 +52,7 @@
             android:id="@+id/RecipeImage"
             android:layout_width="fill_parent"
             android:layout_height="139dp"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
