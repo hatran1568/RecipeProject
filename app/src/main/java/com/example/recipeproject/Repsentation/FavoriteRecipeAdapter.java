@@ -11,10 +11,19 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.recipeproject.DataAccess.DataAccess;
+import com.example.recipeproject.InterfaceGetData.getUserCallback;
 import com.example.recipeproject.R;
 import com.example.recipeproject.model.Recipe;
+import com.example.recipeproject.model.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class FavoriteRecipeAdapter extends FirebaseRecyclerAdapter<Recipe, FavoriteRecipeAdapter.ViewHolder> {
     /**
@@ -29,7 +38,7 @@ public class FavoriteRecipeAdapter extends FirebaseRecyclerAdapter<Recipe, Favor
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Recipe model) {
-
+        
     }
 
     @NonNull
