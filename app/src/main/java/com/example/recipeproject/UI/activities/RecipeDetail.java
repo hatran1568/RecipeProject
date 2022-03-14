@@ -68,9 +68,9 @@ public class RecipeDetail extends AbstractActivity {
         listIngredients = findViewById(R.id.detail_list_ingredients);
         recyclerSteps = findViewById(R.id.detail_recycler_steps);
         Bundle b = getIntent().getExtras();
-        int recipeId = -1; // or other values
+        String recipeId = ""; // or other values
         if(b != null)
-            recipeId = b.getInt("recipeId");
+            recipeId = b.getString("recipeId");
 
         DataAccess.getRecipeById(new getRecipeCallback() {
             @Override
@@ -134,7 +134,6 @@ public class RecipeDetail extends AbstractActivity {
             View listItem = listAdapter.getView(i, null, listView);
             listItem.measure(0, 0);
             totalHeight += listItem.getMeasuredHeight();
-            System.out.println(totalHeight);
         }
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
