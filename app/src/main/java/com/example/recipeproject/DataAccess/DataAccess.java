@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class DataAccess {
 
@@ -75,7 +76,7 @@ public class DataAccess {
                     recipe.setDate(Date.valueOf(date.toString()));
                     recipes.add(recipe);
                 }
-
+                Collections.reverse(recipes);
                 callback.onResponse(recipes);
 
             }
@@ -86,6 +87,12 @@ public class DataAccess {
 
             }
         });
+    }
+
+    public static void deleteRecipeByKey(String key){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference recipeRef = database.getReference("recipe").child(key);
+        recipeRef.removeValue();
     }
 
     public static void getRecipeById(getRecipeCallback callback, String id) {

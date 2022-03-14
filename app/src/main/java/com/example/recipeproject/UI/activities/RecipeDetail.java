@@ -2,6 +2,8 @@ package com.example.recipeproject.UI.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 //import android.widget.Toolbar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +40,7 @@ public class RecipeDetail extends AbstractActivity {
     private Activity mActivity;
     RecyclerView.LayoutManager RecyclerViewLayoutManager;
     //private Recipe recipe;
-    private int recipeId;
+    private String recipeId;
     ImageButton editBtn, deleteBtn;
     TextView recipeName;
     ImageView image;
@@ -80,7 +84,7 @@ public class RecipeDetail extends AbstractActivity {
         listIngredients = findViewById(R.id.detail_list_ingredients);
         recyclerSteps = findViewById(R.id.detail_recycler_steps);
         Bundle b = getIntent().getExtras();
-        String recipeId = ""; // or other values
+        recipeId = ""; // or other values
         if(b != null)
             recipeId = b.getString("recipeId");
 
@@ -134,6 +138,22 @@ public class RecipeDetail extends AbstractActivity {
                     editBtn.setVisibility(View.INVISIBLE);
                     deleteBtn.setVisibility(View.INVISIBLE);
                 }
+                deleteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showConfirmDelete();
+                    }
+                });
+                editBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getApplicationContext(), EditRecipe.class);
+                        Bundle b = new Bundle();
+                        b.putString("recipeId", recipeId); //Your id
+                        intent.putExtras(b); //Put your id to your next Intent
+                        startActivity(intent);
+                    }
+                });
 
             }
         }, recipeId);
@@ -167,6 +187,23 @@ public class RecipeDetail extends AbstractActivity {
         params.height = (totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1)));
         listView.setLayoutParams(params);
         listView.requestLayout();
+    }
+
+    public void showConfirmDelete(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder
+                .setTitle("Delete this recipe?")
+                .setMessage("Just so you know, this can't be undone.")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        DataAccess.deleteRecipeByKey(recipeId);
+                        finish();
+                    }})
+                .setNegativeButton("Cancel", null);
+        builder.create();
+        builder.show();
     }
     }
 
