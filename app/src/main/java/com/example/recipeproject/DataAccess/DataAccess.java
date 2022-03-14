@@ -321,7 +321,7 @@ public class DataAccess {
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
                             if (task.isSuccessful()) {
                                 DataSnapshot snapshot= task.getResult();
-                                String name = snapshot.child("name").getValue().toString();
+                                String name = snapshot.hasChild("description") ? snapshot.child("name").getValue().toString(): "";
                                 recipe.setName(name);
                                 String description = snapshot.hasChild("description") ? snapshot.child("description").getValue().toString() : "";
                                 recipe.setDescription(description);

@@ -100,114 +100,13 @@ public class FavoriteRecipesFragment extends Fragment {
         searchView = rootView.findViewById(R.id.searchView);
         recyclerView = rootView.findViewById(R.id.recyclerviewNewest);
 
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        FirebaseDatabase.getInstance().getReference().keepSynced(true);
-        //DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("user").child(uid).child("favorites");
-        //ArrayList<Recipe> recipes = new ArrayList<>();
-
-        /*myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot child: snapshot.getChildren()){
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference myRef = database.getReference("recipe").child(child.getKey());
-                    Recipe recipe = new Recipe();
-
-                    myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>(){
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DataSnapshot snapshot= task.getResult();
-                                String name = snapshot.child("name").getValue().toString();
-                                recipe.setName(name);
-                                String description = snapshot.child("description").getValue().toString();
-                                recipe.setDescription(description);
-                                String duration = snapshot.child("duration").getValue().toString();
-                                recipe.setDuration(duration);
-                                String portion = snapshot.child("portion").getValue().toString();
-                                recipe.setPortion(portion);
-                                String thumbnail = snapshot.child("thumbnail").getValue().toString();
-                                recipe.setThumbnail(thumbnail);
-                                String userId = snapshot.child("userId").getValue().toString();
-                                recipe.setUserID(userId);
-                                int id = Integer.parseInt(snapshot.child("id").getValue().toString());
-                                recipe.setId(id);
-                                String key = snapshot.getKey();
-                                recipe.setKey(key);
-
-                                ArrayList<Step> steps = new ArrayList<>();
-                                for (DataSnapshot dataSnapshot: snapshot.child("steps").getChildren()
-                                ) {
-                                    Step step = dataSnapshot.getValue(Step.class);
-                                    steps.add(step);
-                                }
-                                recipe.setSteps(steps);
-
-                                ArrayList<String> ingredients = new ArrayList<>();
-                                for (DataSnapshot dataSnapshot: snapshot.child("ingredients").getChildren()
-                                ) {
-                                    ingredients.add(dataSnapshot.getValue().toString());
-                                }
-                                recipe.setIngredients(ingredients);
-                                Date date = Date.valueOf(snapshot.child("date").getValue().toString());
-                                recipe.setDate(date);
-
-                            } else {
-
-                            }
-                        }
-                    });
-                    recipes.add(recipe);
-
-                    adapter.notifyDataSetChanged();
-                    GetDataToRecyclerView(recipes);
-
-                }
-
-                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        ArrayList<Recipe> searchedRecipes = new ArrayList<>();
-                        for (Recipe object : recipes)
-                            if (object.getName().toUpperCase()
-                                    .contains(query.toUpperCase()))
-                                searchedRecipes.add(object);
-                        //Searched Recycler View
-
-                        GetDataToRecyclerView(searchedRecipes);
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        ArrayList<Recipe> searchedRecipes = new ArrayList<>();
-                        for (Recipe object : recipes)
-                            if (object.getName().toUpperCase()
-                                    .contains(newText.toUpperCase()))
-                                searchedRecipes.add(object);
-                        //Searched Recycler View
-
-                        GetDataToRecyclerView(searchedRecipes);
-                        return true;
-                    }
-                });
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });*/
         DataAccess.getFavoritesRecipe(
                 new FirebaseCallback() {
             @Override
             public void onResponse(ArrayList<Recipe> recipes) {
 
-
                 GetDataToRecyclerView(recipes);
-
+                GetDataToRecyclerView(recipes);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
@@ -236,8 +135,6 @@ public class FavoriteRecipesFragment extends Fragment {
                         return true;
                     }
                 });
-                //GetDataToRecyclerView(recipes);
-
             }
         }, FirebaseAuth.getInstance().getCurrentUser().getUid());
 
@@ -246,6 +143,10 @@ public class FavoriteRecipesFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
 
     private void GetDataToRecyclerView(ArrayList<Recipe> recipes) {
 
