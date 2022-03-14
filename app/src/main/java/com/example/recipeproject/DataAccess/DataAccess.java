@@ -38,14 +38,14 @@ public class DataAccess {
                     recipe.setName(name);
                     String description = snapshot.hasChild("description") ? snapshot.child("description").getValue().toString() : "";
                     recipe.setDescription(description);
-                    String duration = snapshot.hasChild("duration") ? snapshot.child("duration").getValue().toString() :"";
+                    String duration = snapshot.hasChild("duration") ? snapshot.child("duration").getValue().toString() : "";
                     recipe.setDuration(duration);
-                    String portion = snapshot.hasChild("portion")? snapshot.child("portion").getValue().toString():"";
+                    String portion = snapshot.hasChild("portion") ? snapshot.child("portion").getValue().toString() : "";
                     recipe.setPortion(portion);
-                    String thumbnail = snapshot.hasChild("thumbnail")? snapshot.child("thumbnail").getValue().toString():"";
+                    String thumbnail = snapshot.hasChild("thumbnail") ? snapshot.child("thumbnail").getValue().toString() : "";
                     recipe.setThumbnail(thumbnail);
                     Object userId = snapshot.child("userId").getValue();
-                    if(userId == null)
+                    if (userId == null)
                         userId = snapshot.child("userID").getValue();
 
                     recipe.setUserID(userId.toString());
@@ -70,8 +70,8 @@ public class DataAccess {
                     }
                     recipe.setIngredients(ingredients);
                     Object date = snapshot.child("date").getValue();
-                    if(date == null)
-                        date =snapshot.child("strdate").getValue();
+                    if (date == null)
+                        date = snapshot.child("strdate").getValue();
                     recipe.setDate(Date.valueOf(date.toString()));
                     recipes.add(recipe);
                 }
@@ -88,7 +88,7 @@ public class DataAccess {
         });
     }
 
-    public static void getRecipeById(getRecipeCallback callback, String id){
+    public static void getRecipeById(getRecipeCallback callback, String id) {
         Recipe recipe = new Recipe();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference recipeRef = database.getReference("recipe").child(id);
@@ -99,14 +99,14 @@ public class DataAccess {
                 recipe.setName(name);
                 String description = snapshot.hasChild("description") ? snapshot.child("description").getValue().toString() : "";
                 recipe.setDescription(description);
-                String duration = snapshot.hasChild("duration") ? snapshot.child("duration").getValue().toString() :"";
+                String duration = snapshot.hasChild("duration") ? snapshot.child("duration").getValue().toString() : "";
                 recipe.setDuration(duration);
-                String portion = snapshot.hasChild("portion")? snapshot.child("portion").getValue().toString():"";
+                String portion = snapshot.hasChild("portion") ? snapshot.child("portion").getValue().toString() : "";
                 recipe.setPortion(portion);
-                String thumbnail = snapshot.hasChild("thumbnail")? snapshot.child("thumbnail").getValue().toString():"";
+                String thumbnail = snapshot.hasChild("thumbnail") ? snapshot.child("thumbnail").getValue().toString() : "";
                 recipe.setThumbnail(thumbnail);
                 Object userId = snapshot.child("userId").getValue();
-                if(userId == null)
+                if (userId == null)
                     userId = snapshot.child("userID").getValue();
 
                 recipe.setUserID(userId.toString());
@@ -134,8 +134,8 @@ public class DataAccess {
                 }
                 recipe.setIngredients(ingredients);
                 Object date = snapshot.child("date").getValue();
-                if(date == null)
-                    date =snapshot.child("strdate").getValue();
+                if (date == null)
+                    date = snapshot.child("strdate").getValue();
                 recipe.setDate(Date.valueOf(date.toString()));
                 callback.onResponse(recipe);
             }
@@ -147,12 +147,12 @@ public class DataAccess {
         });
     }
 
-    public static void getUserById(getUserCallback callback, String id){
+    public static void getUserById(getUserCallback callback, String id) {
         String uid = id;
         User user = new User();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference userRef = database.getReference("user");
-        userRef.orderByChild("id").equalTo(uid).addChildEventListener(new ChildEventListener(){
+        userRef.orderByChild("id").equalTo(uid).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String name = snapshot.child("name").getValue().toString();
@@ -188,22 +188,21 @@ public class DataAccess {
             }
 
 
-
         });
     }
 
-    public static void getRecipes(FirebaseCallback callback){
+    public static void getRecipes(FirebaseCallback callback) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("recipe");
-        ArrayList<Recipe>  recipes = new ArrayList<>();
-        myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>(){
+        ArrayList<Recipe> recipes = new ArrayList<>();
+        myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 
 
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     DataSnapshot postSnapshot = task.getResult();
-                    for ( DataSnapshot snapshot: postSnapshot.getChildren()   ) {
+                    for (DataSnapshot snapshot : postSnapshot.getChildren()) {
                         Recipe recipe = new Recipe();
                         String description = snapshot.child("description").getValue().toString();
                         recipe.setDescription(description);
@@ -221,7 +220,7 @@ public class DataAccess {
                         recipe.setKey(key);
 
                         ArrayList<Step> steps = new ArrayList<>();
-                        for (DataSnapshot dataSnapshot: snapshot.child("steps").getChildren()
+                        for (DataSnapshot dataSnapshot : snapshot.child("steps").getChildren()
                         ) {
                             Step step = dataSnapshot.getValue(Step.class);
                             steps.add(step);
@@ -229,7 +228,7 @@ public class DataAccess {
                         recipe.setSteps(steps);
 
                         ArrayList<String> ingredients = new ArrayList<>();
-                        for (DataSnapshot dataSnapshot: snapshot.child("ingredients").getChildren()
+                        for (DataSnapshot dataSnapshot : snapshot.child("ingredients").getChildren()
                         ) {
                             ingredients.add(dataSnapshot.getValue().toString());
                         }
@@ -247,18 +246,19 @@ public class DataAccess {
             }
         });
     }
-    public static void getRecipesSearch(FirebaseCallback callback, String searchKey){
+
+    public static void getRecipesSearch(FirebaseCallback callback, String searchKey) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("recipe");
-        ArrayList<Recipe>  recipes = new ArrayList<>();
-        myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>(){
+        ArrayList<Recipe> recipes = new ArrayList<>();
+        myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 
 
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     DataSnapshot postSnapshot = task.getResult();
-                    for ( DataSnapshot snapshot: postSnapshot.getChildren()   ) {
+                    for (DataSnapshot snapshot : postSnapshot.getChildren()) {
                         Recipe recipe = new Recipe();
                         String description = snapshot.child("description").getValue().toString();
                         recipe.setDescription(description);
@@ -276,7 +276,7 @@ public class DataAccess {
                         recipe.setKey(key);
 
                         ArrayList<Step> steps = new ArrayList<>();
-                        for (DataSnapshot dataSnapshot: snapshot.child("steps").getChildren()
+                        for (DataSnapshot dataSnapshot : snapshot.child("steps").getChildren()
                         ) {
                             Step step = dataSnapshot.getValue(Step.class);
                             steps.add(step);
@@ -284,7 +284,7 @@ public class DataAccess {
                         recipe.setSteps(steps);
 
                         ArrayList<String> ingredients = new ArrayList<>();
-                        for (DataSnapshot dataSnapshot: snapshot.child("ingredients").getChildren()
+                        for (DataSnapshot dataSnapshot : snapshot.child("ingredients").getChildren()
                         ) {
                             ingredients.add(dataSnapshot.getValue().toString());
                         }
@@ -304,81 +304,79 @@ public class DataAccess {
         });
     }
 
-    public static void getFavoritesRecipe(FirebaseCallback callback, String userId){
+    public static void getFavoritesRecipe(FirebaseCallback callback, String userId) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("user").child(userId).child("favorites");
         ArrayList<Recipe> recipes = new ArrayList<>();
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot child: snapshot.getChildren()){
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference myRef = database.getReference("recipe").child(child.getKey());
-                    Recipe recipe = new Recipe();
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DataSnapshot snapshot = task.getResult();
+                    for (DataSnapshot child : snapshot.getChildren()) {
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference myRef = database.getReference("recipe").child(child.getKey());
+                        Recipe recipe = new Recipe();
 
-                    myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>(){
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DataSnapshot snapshot= task.getResult();
-                                String name = snapshot.child("name").getValue().toString();
-                                recipe.setName(name);
-                                String description = snapshot.hasChild("description") ? snapshot.child("description").getValue().toString() : "";
-                                recipe.setDescription(description);
-                                String duration = snapshot.hasChild("duration") ? snapshot.child("duration").getValue().toString() :"";
-                                recipe.setDuration(duration);
-                                String portion = snapshot.hasChild("portion")? snapshot.child("portion").getValue().toString():"";
-                                recipe.setPortion(portion);
-                                String thumbnail = snapshot.hasChild("thumbnail")? snapshot.child("thumbnail").getValue().toString():"";
-                                recipe.setThumbnail(thumbnail);
-                                Object userId = snapshot.child("userId").getValue();
-                                if(userId == null)
-                                    userId = snapshot.child("userID").getValue();
+                        myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DataSnapshot> childTask) {
+                                if (childTask.isSuccessful()) {
+                                    DataSnapshot snapshot = childTask.getResult();
+                                    String name = snapshot.child("name").getValue().toString();
+                                    recipe.setName(name);
+                                    String description = snapshot.hasChild("description") ? snapshot.child("description").getValue().toString() : "";
+                                    recipe.setDescription(description);
+                                    String duration = snapshot.hasChild("duration") ? snapshot.child("duration").getValue().toString() : "";
+                                    recipe.setDuration(duration);
+                                    String portion = snapshot.hasChild("portion") ? snapshot.child("portion").getValue().toString() : "";
+                                    recipe.setPortion(portion);
+                                    String thumbnail = snapshot.hasChild("thumbnail") ? snapshot.child("thumbnail").getValue().toString() : "";
+                                    recipe.setThumbnail(thumbnail);
+                                    Object userId = snapshot.child("userId").getValue();
+                                    if (userId == null)
+                                        userId = snapshot.child("userID").getValue();
 
-                                recipe.setUserID(userId.toString());
+                                    recipe.setUserID(userId.toString());
 
-                                String key = snapshot.getKey();
-                                recipe.setKey(key);
+                                    String key = snapshot.getKey();
+                                    recipe.setKey(key);
 
-                                //recipe.setKey(id);
-                                //int id = Integer.parseInt(snapshot.child("id").getValue().toString());
-                                //recipe.setId(id);
+                                    //recipe.setKey(id);
+                                    //int id = Integer.parseInt(snapshot.child("id").getValue().toString());
+                                    //recipe.setId(id);
 
-                                ArrayList<Step> steps = new ArrayList<>();
-                                for (DataSnapshot dataSnapshot : snapshot.child("steps").getChildren()
-                                ) {
-                                    Step step = dataSnapshot.getValue(Step.class);
-                                    steps.add(step);
+                                    ArrayList<Step> steps = new ArrayList<>();
+                                    for (DataSnapshot dataSnapshot : snapshot.child("steps").getChildren()
+                                    ) {
+                                        Step step = dataSnapshot.getValue(Step.class);
+                                        steps.add(step);
+                                    }
+                                    recipe.setSteps(steps);
+
+                                    ArrayList<String> ingredients = new ArrayList<>();
+                                    for (DataSnapshot dataSnapshot : snapshot.child("ingredients").getChildren()
+                                    ) {
+                                        String ingredient = dataSnapshot.getValue().toString();
+                                        ingredients.add(ingredient);
+                                    }
+                                    recipe.setIngredients(ingredients);
+                                    Object date = snapshot.child("date").getValue();
+                                    if (date == null)
+                                        date = snapshot.child("strdate").getValue();
+                                    recipe.setDate(Date.valueOf(date.toString()));
+                                    recipes.add(recipe);
+                                } else {
+
                                 }
-                                recipe.setSteps(steps);
-
-                                ArrayList<String> ingredients = new ArrayList<>();
-                                for (DataSnapshot dataSnapshot : snapshot.child("ingredients").getChildren()
-                                ) {
-                                    String ingredient = dataSnapshot.getValue().toString();
-                                    ingredients.add(ingredient);
-                                }
-                                recipe.setIngredients(ingredients);
-                                Object date = snapshot.child("date").getValue();
-                                if(date == null)
-                                    date =snapshot.child("strdate").getValue();
-                                recipe.setDate(Date.valueOf(date.toString()));
-
-                            } else {
-
                             }
-                        }
-                    });
-                    recipes.add(recipe);
+
+                        });
+                    }
+                callback.onResponse(recipes );
                 }
-                callback.onResponse(recipes);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+                 else{}
             }
         });
-
     }
 }
