@@ -11,8 +11,6 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
@@ -104,7 +102,21 @@
                 app:layout_constraintTop_toBottomOf="@id/cardView4" />
 
             <View
-                android:id="@+id/separator"
+                android:id="@+id/separator_top"
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="10dp"
+                android:background="#801B1919"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detail_description" />
+
+            <View
+                android:id="@+id/separator_bottom"
                 android:layout_width="fill_parent"
                 android:layout_height="1dip"
                 android:layout_alignParentTop="true"
@@ -112,13 +124,13 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                android:background="#1B1919"
+                android:background="#801B1919"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/detail_description" />
+                app:layout_constraintTop_toBottomOf="@id/separator_top" />
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/detail_text_ingredient"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -127,20 +139,28 @@
                 android:textSize="17dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/separator" />
+                app:layout_constraintTop_toBottomOf="@id/separator_bottom" />
+
+            <TextView
+                android:id="@+id/detail_portion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:text="TextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detail_text_ingredient" />
 
             <ListView
                 android:id="@+id/detail_list_ingredients"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginTop="5dp"
                 android:footerDividersEnabled="false"
                 android:headerDividersEnabled="false"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView13" />
+                app:layout_constraintTop_toBottomOf="@id/detail_portion" />
 
             <!--            <androidx.recyclerview.widget.RecyclerView-->
             <!--                android:id="@+id/recycler_ingredients"-->

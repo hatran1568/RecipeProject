@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 //import android.widget.Toolbar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -56,6 +56,8 @@ public class RecipeDetail extends AbstractActivity {
     ListView listIngredients;
     RecyclerView recyclerSteps;
     ImageButton backButton;
+    TextView portion;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +87,7 @@ public class RecipeDetail extends AbstractActivity {
         date = findViewById(R.id.detail_date);
         listIngredients = findViewById(R.id.detail_list_ingredients);
         recyclerSteps = findViewById(R.id.detail_recycler_steps);
+        portion = findViewById(R.id.detail_portion);
         Bundle b = getIntent().getExtras();
         recipeId = ""; // or other values
         if(b != null)
@@ -156,7 +159,13 @@ public class RecipeDetail extends AbstractActivity {
                         startActivity(intent);
                     }
                 });
-                createDurationTextView();
+                if(!(recipe.getDuration() == null || recipe.getDuration().isEmpty()))
+                    createDurationTextView(recipe.getDuration());
+                else removeSeparator();
+                if(!(recipe.getPortion() == null || recipe.getPortion().isEmpty()))
+                    portion.setText("\uD83D\uDC64" + " "+recipe.getPortion());
+                else removePortion();
+
 
             }
         }, recipeId);
@@ -209,16 +218,48 @@ public class RecipeDetail extends AbstractActivity {
         builder.show();
     }
 
-    public void createDurationTextView(){
-        int dpRatio = (int) mContext.getResources().getDisplayMetrics().density;
+    public void createDurationTextView(String duration){
+        ConstraintLayout constraintLayout = findViewById(R.id.detail_constraint_layout);
+        View separator_bottom = findViewById(R.id.separator_bottom);
+        View separator_top = findViewById(R.id.separator_top);
+        float dpRatio = mContext.getResources().getDisplayMetrics().density;
         ConstraintSet set = new ConstraintSet();
         TextView durationText = new TextView(mContext);
         durationText.setId(View.generateViewId());
-        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100*dpRatio);
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
         durationText.setLayoutParams(params);
-        durationText.setText("Duration");
-        ConstraintLayout constraintLayout = findViewById(R.id.detail_constraint_layout);
+        durationText.setText("\uD83D\uDD52" + " " + duration);
+        durationText.setGravity(Gravity.CENTER);
         constraintLayout.addView(durationText);
+
+        set.clone(constraintLayout);
+        set.clear(separator_bottom.getId(), ConstraintSet.TOP);
+        set.connect(durationText.getId(), ConstraintSet.TOP, separator_top.getId(), ConstraintSet.BOTTOM, (int) (10*dpRatio));
+        set.connect(separator_bottom.getId(), ConstraintSet.TOP, durationText.getId(), ConstraintSet.BOTTOM, (int) (10*dpRatio));
+        set.applyTo(constraintLayout);
+    }
+    public void removeSeparator(){
+        float dpRatio = mContext.getResources().getDisplayMetrics().density;
+        View separator_bottom = findViewById(R.id.separator_bottom);
+        View separator_top = findViewById(R.id.separator_top);
+        ConstraintLayout constraintLayout = findViewById(R.id.detail_constraint_layout);
+        ConstraintSet set = new ConstraintSet();
+        set.clone(constraintLayout);
+        set.clear(separator_bottom.getId(), ConstraintSet.TOP);
+        constraintLayout.removeView(separator_top);
+        set.connect(separator_bottom.getId(), ConstraintSet.TOP, description.getId(), ConstraintSet.BOTTOM, (int) (12*dpRatio));
+        set.applyTo(constraintLayout);
+    }
+    public void removePortion(){
+        float dpRatio = mContext.getResources().getDisplayMetrics().density;
+        ConstraintLayout constraintLayout = findViewById(R.id.detail_constraint_layout);
+        ConstraintSet set = new ConstraintSet();
+        set.clone(constraintLayout);
+        set.clear(listIngredients.getId(), ConstraintSet.TOP);
+        constraintLayout.removeView(portion);
+        set.connect(listIngredients.getId(), ConstraintSet.TOP, R.id.detail_text_ingredient, ConstraintSet.BOTTOM, (int) (12*dpRatio));
+        set.applyTo(constraintLayout);
     }
     }
 
