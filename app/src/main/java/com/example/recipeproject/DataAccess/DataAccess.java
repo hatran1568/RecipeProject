@@ -29,7 +29,7 @@ public class DataAccess {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("recipe");
         ArrayList<Recipe> recipes = new ArrayList<>();
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.orderByChild("date").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot postSnapshot) {
 
