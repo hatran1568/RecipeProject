@@ -46,7 +46,7 @@ public class UpdateUserProfileActivity extends AbstractActivity {
     private ImageButton btnAddPhoto;
     private EditText editTextUsername;
     private EditText editTextEmail;
-    private EditText editTextDescription;
+    //private EditText editTextDescription;
 
     private Toolbar toolbar;
     private Uri imageUri;
@@ -67,7 +67,8 @@ public class UpdateUserProfileActivity extends AbstractActivity {
         userAvatar = findViewById(R.id.imageView5);
         editTextUsername = findViewById(R.id.editTextName);
         editTextEmail = findViewById(R.id.editTextEmail);
-        editTextDescription = findViewById(R.id.RecipeDescription);
+        editTextEmail.setFocusable(false);
+        //editTextDescription = findViewById(R.id.RecipeDescription);
 
         // set on click events for button inside toolbar
         Button saveProfileBtn = findViewById(R.id.AddRecipeButton);
@@ -152,7 +153,7 @@ public class UpdateUserProfileActivity extends AbstractActivity {
 
         reference.child("email").setValue(editTextEmail.getText().toString());
         reference.child("name").setValue(editTextUsername.getText().toString());
-        reference.child("description").setValue(editTextDescription.getText().toString());
+        //reference.child("description").setValue(editTextDescription.getText().toString());
 
         if (isImageChanged){
             reference.child("image_link").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
