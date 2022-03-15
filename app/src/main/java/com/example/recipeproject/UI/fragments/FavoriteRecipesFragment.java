@@ -109,6 +109,7 @@ public class FavoriteRecipesFragment extends Fragment implements SwipeRefreshLay
         DatabaseReference myRef = database.getReference("user").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("favorites");
         ArrayList<String> favoriteIds = new ArrayList<>();
 
+        // get data from firebase and populate recyclerView
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

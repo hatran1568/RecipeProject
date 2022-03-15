@@ -36,7 +36,7 @@ public class FavoriteRecipeAdapter  extends RecyclerView.Adapter<FavoriteRecipeA
     private SelectListener listener;
     DatabaseReference databaseRef, favRef, favListRef;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    Boolean favChecker = false;
+    boolean favChecker = true;
     public class MyView extends  RecyclerView.ViewHolder {
         TextView userName;
         TextView recipeName;
@@ -118,11 +118,7 @@ public class FavoriteRecipeAdapter  extends RecyclerView.Adapter<FavoriteRecipeA
                                  int position)
     {
         //Get Logged in user.
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String currentUserId = null;
-        if (user != null){
-            currentUserId = user.getUid();
-        }
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         Recipe recipe = list.get(position);
         final String recipeKey = recipe.getKey();
@@ -136,36 +132,26 @@ public class FavoriteRecipeAdapter  extends RecyclerView.Adapter<FavoriteRecipeA
             }
         },recipe.getUserID());
 
-        if (user != null) {
-            holder.favoriteChecker(recipe);
-            String finalCurrentUserId = currentUserId;
-            holder.favBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    favChecker = true;
-                    favRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(favChecker.equals(true)){
-                                if(snapshot.child(finalCurrentUserId).child("favorites").hasChild(recipeKey)){
-                                    favRef.child(finalCurrentUserId).child("favorites").child(recipeKey).removeValue();
-                                    favChecker = false;
-                                } else {
-                                    favRef.child(finalCurrentUserId).child("favorites").child(recipeKey).setValue(true);
-                                    favChecker = false;
-                                }
-                            }
+        holder.favoriteChecker(recipe);
+        String finalCurrentUserId = currentUserId;
+        holder.favBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                favRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        favRef.child(finalCurrentUserId).child("favorites").child(recipeKey).removeValue();
+                    }
 
-                        }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+                notifyItemChanged(holder.getLayoutPosition());
+            }
+        });
 
-                        }
-                    });
-                }
-            });
-        }
 
         holder.recipeDescription.setText(recipe.getDescription());
         if (list.get(position).getThumbnail() != null && !list.get(position).getThumbnail().isEmpty())
