@@ -337,7 +337,10 @@ public class EditRecipe extends AbstractActivity {
         DataAccess.getRecipeById(new getRecipeCallback() {
             @Override
             public void onResponse(Recipe recipe) {
-                Picasso.with(EditRecipe.this).load(recipe.getThumbnail()).into(RecipeThumbnail);
+                if(recipe.getThumbnail()!= null && !recipe.getThumbnail().isEmpty()){
+                    Picasso.with(EditRecipe.this).load(recipe.getThumbnail()).into(RecipeThumbnail);
+                }
+
                 rename.setText(recipe.getName());
                 RecipeDescription.setText(recipe.getDescription());
                 portion.setText(recipe.getPortion());

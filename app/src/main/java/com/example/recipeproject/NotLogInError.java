@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.example.recipeproject.UI.activities.AbstractActivity;
 import com.example.recipeproject.UI.activities.HomeActivity;
+import com.example.recipeproject.UI.activities.ProfileActivity;
 import com.example.recipeproject.UI.activities.SearchActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -40,6 +41,10 @@ public class NotLogInError extends AbstractActivity {
                     case R.id.nav_search:
                         // TODO: add intent to search activity
                         startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.nav_profile:
+                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                         overridePendingTransition(0,0);
                         return true;
                 }

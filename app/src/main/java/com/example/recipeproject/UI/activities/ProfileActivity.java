@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.recipeproject.NotLogInError;
 import com.example.recipeproject.R;
 import com.example.recipeproject.UI.fragments.GuestProfileFragment;
 import com.example.recipeproject.UI.fragments.UserProfileFragment;
@@ -31,8 +32,14 @@ public class ProfileActivity extends AbstractActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.nav_add:
-                        startActivity(new Intent(getApplicationContext(), AddRecipeActivity.class));
-                        overridePendingTransition(0,0);
+                        if(isLoggedIn){
+                            startActivity(new Intent(getApplicationContext(), AddRecipeActivity.class));
+                            overridePendingTransition(0,0);
+                        }
+                        else{
+                            startActivity(new Intent(getApplicationContext(), NotLogInError.class));
+                            overridePendingTransition(0,0);
+                        }
                         return true;
                     case R.id.nav_home:
                         startActivity(new Intent(getApplicationContext(), HomeActivity.class));

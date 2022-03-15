@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.FirebaseCallback;
+import com.example.recipeproject.NotLogInError;
 import com.example.recipeproject.R;
 import com.example.recipeproject.Repsentation.Adapter;
 import com.example.recipeproject.listener.SelectListener;
@@ -62,9 +63,14 @@ public class SearchActivity extends AbstractActivity implements SelectListener {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.nav_add:
-                        // TODO: add intent to add recipe
-                        startActivity(new Intent(getApplicationContext(), AddRecipeActivity.class));
-                        overridePendingTransition(0,0);
+                        if(isLoggedIn){
+                            startActivity(new Intent(getApplicationContext(), AddRecipeActivity.class));
+                            overridePendingTransition(0,0);
+                        }
+                        else{
+                            startActivity(new Intent(getApplicationContext(), NotLogInError.class));
+                            overridePendingTransition(0,0);
+                        }
                         return true;
                     case R.id.nav_home:
                         startActivity(new Intent(getApplicationContext(), HomeActivity.class));

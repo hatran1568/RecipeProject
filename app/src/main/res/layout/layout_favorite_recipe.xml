@@ -108,18 +108,20 @@
                     app:layout_constraintTop_toBottomOf="@+id/recipeName1"
                     app:layout_constraintVertical_bias="0.0" />
 
-                <TextView
-                    android:id="@+id/recipeKey"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="@+id/description1"
+                <ImageButton
+                    android:id="@+id/favBtnProfile"
+                    android:layout_width="25dp"
+                    android:layout_height="27dp"
+                    android:background="@drawable/favorite_off"
+                    android:scaleType="fitCenter"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/description1"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.053"
+                    app:layout_constraintHorizontal_bias="0.993"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.805" />
+                    app:layout_constraintVertical_bias="0.919"
+                    app:srcCompat="@drawable/favorite_off" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

@@ -21,7 +21,6 @@ import com.example.recipeproject.listener.SelectListener;
 import com.example.recipeproject.model.Recipe;
 import com.example.recipeproject.model.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +36,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
     private Activity mActivity;
     private SelectListener listener;
     DatabaseReference databaseRef, favRef, favListRef;
+    Boolean favChecker = false;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     public class MyView extends RecyclerView.ViewHolder {
@@ -46,9 +46,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
         TextView recipeDescription;
         CardView card;
         ImageView avatar;
-
         ImageView favBtn;
-
 
         public MyView(View view) {
             super(view);
@@ -58,12 +56,12 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
             recipeDescription = view.findViewById(R.id.description1);
             card = view.findViewById(R.id.card1);
             avatar = view.findViewById(R.id.avatar);
-            favBtn = view.findViewById(R.id.favBtn);
+            favBtn = view.findViewById(R.id.favBtnProfile);
         }
 
         //Check or uncheck the Favorite button
         public void favoriteChecker(Recipe recipe) {
-            favBtn = itemView.findViewById(R.id.favBtn);
+            favBtn = itemView.findViewById(R.id.favBtnProfile);
             favBtn.setImageResource(R.drawable.favorite_on);
 
         }
@@ -84,7 +82,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
         View itemView
                 = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.layout_cardview_double,
+                .inflate(R.layout.layout_favorite_recipe,
                         parent,
                         false);
 
@@ -97,6 +95,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
     public void onBindViewHolder(final MyView holder,
                                  int position) {
 
+        final Boolean[] checker = new Boolean[1];
         //Get Logged in user.
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -117,10 +116,15 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
         holder.favBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                favChecker = true;
                 favRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        favRef.child(finalCurrentUserId).child("favorites").child(recipeKey).removeValue();
+                        if(favChecker.equals(true)){
+                            if(snapshot.child(finalCurrentUserId).child("favorites").hasChild(recipeKey)) {
+                                favRef.child(finalCurrentUserId).child("favorites").child(recipeKey).removeValue();
+                                favChecker = false;
+                            }}
                         mContext.startActivity(new Intent(mContext, ProfileActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
 
                     }
