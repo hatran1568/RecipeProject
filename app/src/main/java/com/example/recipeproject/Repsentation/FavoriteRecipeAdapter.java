@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,7 +15,6 @@ import android.view.LayoutInflater;
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.getUserCallback;
 import com.example.recipeproject.R;
-import com.example.recipeproject.UI.activities.ProfileActivity;
 import com.example.recipeproject.listener.SelectListener;
 import com.example.recipeproject.model.Recipe;
 import com.example.recipeproject.model.User;
