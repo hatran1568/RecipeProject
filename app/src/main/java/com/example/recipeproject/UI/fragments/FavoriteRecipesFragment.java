@@ -107,14 +107,13 @@ public class FavoriteRecipesFragment extends Fragment implements SwipeRefreshLay
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("user").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("favorites");
         ArrayList<String> favoriteIds = new ArrayList<>();
+        ArrayList<Recipe> favoriteRecipes = new ArrayList<>();
 
         // get data from firebase and populate recyclerView
         /*myRef.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<Recipe> favoriteRecipes = new ArrayList<>();
-
                 for(DataSnapshot child: snapshot.getChildren()){
                     favoriteIds.add(child.getKey());
                 }
@@ -232,7 +231,7 @@ public class FavoriteRecipesFragment extends Fragment implements SwipeRefreshLay
                 startActivity(intent);
             }
         });
-        //adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
         recyclerView.getRecycledViewPool().clear();
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);

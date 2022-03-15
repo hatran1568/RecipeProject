@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Date;
@@ -318,25 +319,88 @@ public class DataAccess {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("user").child(userId).child("favorites");
         ArrayList<Recipe> recipes = new ArrayList<>();
-        myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DataSnapshot snapshot = task.getResult();
-                    for (DataSnapshot child : snapshot.getChildren()) {
-                        FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference myRef = database.getReference("recipe").child(child.getKey());
-                        getRecipeById(new getRecipeCallback() {
-                            @Override
-                            public void onResponse(Recipe recipe) {
-                                if (recipe!=null)
-                                    recipes.add(recipe);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference recipeRef = database.getReference("recipe");
+                    Recipe recipe = new Recipe();
+                    recipeRef.orderByKey().equalTo(child.getKey()).addChildEventListener(new ChildEventListener() {
+
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                            String name = snapshot.hasChild("name") ? snapshot.child("name").getValue().toString() : "";
+                            recipe.setName(name);
+                            String description = snapshot.hasChild("description") ? snapshot.child("description").getValue().toString() : "";
+                            recipe.setDescription(description);
+                            String duration = snapshot.hasChild("duration") ? snapshot.child("duration").getValue().toString() : "";
+                            recipe.setDuration(duration);
+                            String portion = snapshot.hasChild("portion") ? snapshot.child("portion").getValue().toString() : "";
+                            recipe.setPortion(portion);
+                            String thumbnail = snapshot.hasChild("thumbnail") ? snapshot.child("thumbnail").getValue().toString() : "";
+                            recipe.setThumbnail(thumbnail);
+                            Object userId = snapshot.child("userId").getValue();
+                            if (userId == null)
+                                userId = snapshot.child("userID").getValue();
+
+                            recipe.setUserID(userId.toString());
+
+                            String key = snapshot.getKey();
+                            recipe.setKey(key);
+
+                            //int id = Integer.parseInt(snapshot.child("id").getValue().toString());
+                            //recipe.setId(id);
+
+                            ArrayList<Step> steps = new ArrayList<>();
+                            for (DataSnapshot dataSnapshot : snapshot.child("steps").getChildren()
+                            ) {
+                                Step step = dataSnapshot.getValue(Step.class);
+                                steps.add(step);
                             }
-                        }, child.getKey());
-                    }
-                callback.onResponse(recipes);
+                            recipe.setSteps(steps);
+
+                            ArrayList<String> ingredients = new ArrayList<>();
+                            for (DataSnapshot dataSnapshot : snapshot.child("ingredients").getChildren()
+                            ) {
+                                String ingredient = dataSnapshot.getValue().toString();
+                                ingredients.add(ingredient);
+                            }
+                            recipe.setIngredients(ingredients);
+                            Object date = snapshot.child("date").getValue();
+                            if (date == null)
+                                date = snapshot.child("strdate").getValue();
+                            recipe.setDate(Date.valueOf(date.toString()));
+                            recipes.add(recipe);
+                        }
+
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
-                 else{}
+                callback.onResponse(recipes);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
