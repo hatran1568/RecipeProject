@@ -249,39 +249,16 @@ public class EditRecipe extends AbstractActivity {
             }
         });
         Button btnAdd = findViewById(R.id.AddRecipeButton);
-        rename.addTextChangedListener(new TextWatcher() {
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if(s.toString().trim().length()==0){
-                    btnAdd.setEnabled(false);
-                } else {
-                    btnAdd.setEnabled(true);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-                // TODO Auto-generated method stub
-
-            }
-
-
-        });
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(TAG,"inget "+ String.valueOf(stepTextId.size()));
+
                 if(ingreId.size() ==0|| stepTextId.size()==0||rename.getText().toString().length()==0){
                     Toast.makeText(EditRecipe.this,"Please fill ingredients and steps",Toast.LENGTH_LONG).show();
 
-                    return;
+                   return;
                 }
                 Thread thread = new Thread(){
                     @Override
@@ -291,17 +268,11 @@ public class EditRecipe extends AbstractActivity {
                             TextView t = findViewById(index);
                             ingredients.add(t.getText().toString());
                         }
-                        recipe.setName(rename.getText().toString());
-                        recipe.setDescription(RecipeDescription.getText().toString());
-                        recipe.setPortion(portion.getText().toString());
-                        recipe.setDuration(duration.getText().toString());
-                        String strDate = dtf.format(LocalDate.now());
-                        recipe.setIngredients(ingredients);
-                        String key = myRef.push().getKey();
-                        recipe.setUserID(firebaseUser.getUid());
-                        recipe.setKey(key);
-
-
+                        String key = recipeId;
+                        recipeRef.child(key).child("name").setValue(rename.getText().toString());
+                        recipeRef.child(key).child("description").setValue(RecipeDescription.getText().toString());
+                        recipeRef.child(key).child("portion").setValue(portion.getText().toString());
+                        recipeRef.child(key ).child("duration").setValue(duration.getText().toString());
                         if(BooleanIMapping.get(R.id.RecipeImage)==true) {
 
 
@@ -317,7 +288,7 @@ public class EditRecipe extends AbstractActivity {
                             Step s = new Step();
                             int index=i;
                             TextView t = findViewById(stepTextId.get(i));
-                            s.setText(t.getText().toString());
+                            recipeRef.child(key).child("steps").child(String.valueOf(index)).child("text").setValue(t.getText().toString());
                             ImageView imageUri = findViewById(imgStepId.get(i));
                             if(BooleanIMapping.get(imgStepId.get(i))==true) {
                                 FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
@@ -330,13 +301,12 @@ public class EditRecipe extends AbstractActivity {
                             }
                             steps.add(s);
                         }
-                        recipe.setSteps(steps);
 
-                        recipe.setStrdate(dtf.format(LocalDate.now()));
 
-                        recipeRef.child(key).setValue(recipe);
 
-                        recipeRef.child(key).child("date").setValue(strDate);
+
+
+
                     }
                 };
                 thread.run();
@@ -371,6 +341,22 @@ public class EditRecipe extends AbstractActivity {
                     newIngre.setId(View.generateViewId());
                     newIngre.setBackgroundResource(R.drawable.edit_text_border);
                     newIngre.setText(ing);
+                    newIngre.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            ingreId.add(newIngre.getId());
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
                     ImageButton btn = new ImageButton(getApplicationContext());
                     btn.setBackgroundColor(Color.TRANSPARENT);
                     btn.setImageDrawable(getDrawable(R.drawable.ic_baseline_close_24));
@@ -394,10 +380,79 @@ public class EditRecipe extends AbstractActivity {
                         }
                     });
                 }
+                ArrayList<Step> steps1 = recipe.getSteps();
+                for (Step step : steps1
+                     ) {
+                    ConstraintLayout ctrlayout = new ConstraintLayout(getApplicationContext());
+                    ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+                    int marg = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+                    layoutParams.setMargins(0, marg, marg, marg / 2);
+                    ctrlayout.setLayoutParams(layoutParams);
+                    EditText newStep = new EditText(getApplicationContext());
+                    newStep.setHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()));
+                    newStep.setWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics()));
+                    newStep.setId(View.generateViewId());
+                    newStep.setBackgroundResource(R.drawable.edit_text_border);
+                    newStep.setText(step.getText());
+                    ImageButton btn = new ImageButton(getApplicationContext());
+                    btn.setBackgroundColor(Color.TRANSPARENT);
+                    btn.setImageDrawable(getDrawable(R.drawable.ic_baseline_close_24));
+                    btn.setId(View.generateViewId());
+                    ImageView img = new ImageView(getApplicationContext());
+                    img.setImageDrawable(getDrawable(R.drawable.ic_food));
+                    img.setId(View.generateViewId());
+                    if(step.getImage()!=null ){
+                        Picasso.with(EditRecipe.this).load(step.getImage()).into(img);
+                    }
+
+                    BooleanIMapping.put(img.getId(),false);
+                    img.setScaleType(ImageView.ScaleType.FIT_XY);
+                    stepTextId.add(newStep.getId());
+                    imgStepId.add(img.getId());
+                    ConstraintSet set = new ConstraintSet();
+                    img.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String[] PERMISSIONS = {
+                                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            };
+                            // Check user permission
+                            if (PermissionHelper.hasPermissions(EditRecipe.this, PERMISSIONS)) {
+                                showImagePicker(img.getId());
+                            } else {
+                                ActivityCompat.requestPermissions(EditRecipe.this, PERMISSIONS, PICKER_REQUEST_CODE);
+                            }
+                        }
+                    });
+                    ctrlayout.addView(newStep);
+                    ctrlayout.addView(btn);
+                    ctrlayout.addView(img);
+                    set.clone(ctrlayout);
+                    set.constrainHeight(img.getId(), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics()));
+                    set.constrainWidth(img.getId(), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 180, getResources().getDisplayMetrics()));
+                    set.connect(img.getId(), ConstraintSet.TOP, newStep.getId(), ConstraintSet.BOTTOM, 15);
+                    set.connect(img.getId(), ConstraintSet.LEFT, set.PARENT_ID, ConstraintSet.LEFT, 15);
+
+                    set.constrainWidth(btn.getId(), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics()));
+                    set.constrainHeight(btn.getId(), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()));
+                    set.connect(btn.getId(), ConstraintSet.RIGHT, set.PARENT_ID, ConstraintSet.RIGHT);
+                    set.applyTo(ctrlayout);
+
+                    addStep.addView(ctrlayout);
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view1) {
+                            stepTextId.remove(Integer.valueOf(newStep.getId()));
+                            imgStepId.remove(Integer.valueOf(img.getId()));
+                            addStep.removeView(ctrlayout);
+                        }
+                    });
+                }
 
             }
         }, recipeId);
-        Log.d(TAG, "onCreate: ");
+
             }
     private void showImagePicker(int id) {
         Intent intent = new Intent();
