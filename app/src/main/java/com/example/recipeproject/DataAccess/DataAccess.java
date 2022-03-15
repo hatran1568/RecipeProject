@@ -326,51 +326,15 @@ public class DataAccess {
                     for (DataSnapshot child : snapshot.getChildren()) {
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference myRef = database.getReference("recipe").child(child.getKey());
-                        Recipe recipe = new Recipe();
-
-                        myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>(){
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DataSnapshot snapshot= task.getResult();
-                                String name = snapshot.hasChild("description") ? snapshot.child("name").getValue().toString(): "";
-                                recipe.setName(name);
-                                String description = snapshot.hasChild("description") ? snapshot.child("description").getValue().toString() : "";
-                                recipe.setDescription(description);
-                                String duration = snapshot.hasChild("duration") ? snapshot.child("duration").getValue().toString() :"";
-                                recipe.setDuration(duration);
-                                String portion = snapshot.hasChild("portion")? snapshot.child("portion").getValue().toString():"";
-                                recipe.setPortion(portion);
-                                String thumbnail = snapshot.hasChild("thumbnail")? snapshot.child("thumbnail").getValue().toString():"";
-                                recipe.setThumbnail(thumbnail);
-                                Object userId = snapshot.child("userId").getValue();
-                                if(userId == null)
-                                    userId = snapshot.child("userID").getValue();
-
-                                recipe.setUserID(userId.toString());
-
-                                String key = snapshot.getKey();
-                                recipe.setKey(key);
-
-                                //recipe.setKey(id);
-                                //int id = Integer.parseInt(snapshot.child("id").getValue().toString());
-                                //recipe.setId(id);
-
-                                ArrayList<Step> steps = new ArrayList<>();
-                                for (DataSnapshot dataSnapshot : snapshot.child("steps").getChildren()
-                                ) {
-                                    Step step = dataSnapshot.getValue(Step.class);
-                                    steps.add(step);
-                                }
-                                recipe.setSteps(steps);
-
-                                }
+                        getRecipeById(new getRecipeCallback() {
+                            @Override
+                            public void onResponse(Recipe recipe) {
+                                if (recipe!=null)
+                                    recipes.add(recipe);
                             }
-
-                        });
-                        recipes.add(recipe);
+                        }, child.getKey());
                     }
-                callback.onResponse(recipes );
+                callback.onResponse(recipes);
                 }
                  else{}
             }

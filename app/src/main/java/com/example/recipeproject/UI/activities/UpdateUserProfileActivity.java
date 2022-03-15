@@ -27,6 +27,7 @@ import com.example.recipeproject.utils.FirestoreHelper;
 import com.example.recipeproject.utils.PermissionHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -211,7 +212,7 @@ public class UpdateUserProfileActivity extends AbstractActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            String userId = firebaseUser.getUid();
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("user").child(userId);
 
             FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {

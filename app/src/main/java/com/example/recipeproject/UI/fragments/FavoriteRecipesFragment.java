@@ -49,7 +49,6 @@ import java.util.StringTokenizer;
 public class FavoriteRecipesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private RecyclerView recyclerView;
-    private ArrayList<Recipe> favoriteRecipes = new ArrayList<>();
     private SearchView searchView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -110,9 +109,12 @@ public class FavoriteRecipesFragment extends Fragment implements SwipeRefreshLay
         ArrayList<String> favoriteIds = new ArrayList<>();
 
         // get data from firebase and populate recyclerView
-        myRef.addValueEventListener(new ValueEventListener() {
+        /*myRef.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Recipe> favoriteRecipes = new ArrayList<>();
+
                 for(DataSnapshot child: snapshot.getChildren()){
                     favoriteIds.add(child.getKey());
                 }
@@ -168,10 +170,47 @@ public class FavoriteRecipesFragment extends Fragment implements SwipeRefreshLay
 
             }
 
-        });
+        });*/
 
+        DataAccess.getFavoritesRecipe(new FirebaseCallback() {
+            @Override
+            public void onResponse(ArrayList<Recipe> recipes) {
+                swipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        GetDataToRecyclerView(recipes);
+                    }
+                });
 
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        ArrayList<Recipe> searchedRecipes = new ArrayList<>();
+                        for (Recipe object : recipes)
+                            if (object.getName().toUpperCase()
+                                    .contains(query.toUpperCase()))
+                                searchedRecipes.add(object);
+                        //Searched Recycler View
 
+                        GetDataToRecyclerView(searchedRecipes);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        ArrayList<Recipe> searchedRecipes = new ArrayList<>();
+                        for (Recipe object : recipes)
+                            if (object.getName().toUpperCase()
+                                    .contains(newText.toUpperCase()))
+                                searchedRecipes.add(object);
+                        //Searched Recycler View
+
+                        GetDataToRecyclerView(searchedRecipes);
+                        return true;
+                    }
+                });
+            }
+        }, FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         // Inflate the layout for this fragment
         return rootView;
@@ -193,14 +232,15 @@ public class FavoriteRecipesFragment extends Fragment implements SwipeRefreshLay
                 startActivity(intent);
             }
         });
-        adapter.notifyDataSetChanged();
+        //adapter.notifyDataSetChanged();
+        recyclerView.getRecycledViewPool().clear();
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void onRefresh() {
-        GetDataToRecyclerView(favoriteRecipes);
+        //GetDataToRecyclerView(favoriteRecipes);
         swipeRefreshLayout.setRefreshing(false);
     }
 }
