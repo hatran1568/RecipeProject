@@ -103,7 +103,7 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
         View itemView
                 = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.layout_cardview_double,
+                .inflate(R.layout.layout_cardview,
                         parent,
                         false);
 

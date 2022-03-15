@@ -1,5 +1,7 @@
 package com.example.recipeproject.DataAccess;
 
+import android.graphics.Path;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -30,7 +32,7 @@ public class DataAccess {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("recipe");
         ArrayList<Recipe> recipes = new ArrayList<>();
-        myRef.orderByChild("date").addValueEventListener(new ValueEventListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot postSnapshot) {
 
@@ -77,7 +79,7 @@ public class DataAccess {
                     recipe.setDate(Date.valueOf(date.toString()));
                     recipes.add(recipe);
                 }
-                Collections.reverse(recipes);
+                //Collections.reverse(recipes);
                 callback.onResponse(recipes);
 
             }
@@ -89,7 +91,65 @@ public class DataAccess {
             }
         });
     }
+    public static void getRecipesByPage(String lastValue, int size, FirebaseCallback callback, ArrayList<Recipe> recipes){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("recipe");
+        myRef.orderByKey().startAfter(lastValue).limitToFirst(size).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot postSnapshot) {
+                for (DataSnapshot snapshot : postSnapshot.getChildren()) {
+                    Recipe recipe = new Recipe();
+                    String name = snapshot.child("name").getValue().toString();
+                    recipe.setName(name);
+                    String description = snapshot.hasChild("description") ? snapshot.child("description").getValue().toString() : "";
+                    recipe.setDescription(description);
+                    String duration = snapshot.hasChild("duration") ? snapshot.child("duration").getValue().toString() : "";
+                    recipe.setDuration(duration);
+                    String portion = snapshot.hasChild("portion") ? snapshot.child("portion").getValue().toString() : "";
+                    recipe.setPortion(portion);
+                    String thumbnail = snapshot.hasChild("thumbnail") ? snapshot.child("thumbnail").getValue().toString() : "";
+                    recipe.setThumbnail(thumbnail);
+                    Object userId = snapshot.child("userId").getValue();
+                    if (userId == null)
+                        userId = snapshot.child("userID").getValue();
 
+                    recipe.setUserID(userId.toString());
+                    String key = snapshot.getKey();
+                    recipe.setKey(key);
+
+                    int id = Integer.parseInt(snapshot.child("id").getValue().toString());
+                    recipe.setId(id);
+
+                    ArrayList<Step> steps = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot : snapshot.child("steps").getChildren()
+                    ) {
+                        Step step = dataSnapshot.getValue(Step.class);
+                        steps.add(step);
+                    }
+                    recipe.setSteps(steps);
+
+                    ArrayList<String> ingredients = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot : snapshot.child("ingredients").getChildren()
+                    ) {
+                        ingredients.add(dataSnapshot.getValue().toString());
+                    }
+                    recipe.setIngredients(ingredients);
+                    Object date = snapshot.child("date").getValue();
+                    if (date == null)
+                        date = snapshot.child("strdate").getValue();
+                    recipe.setDate(Date.valueOf(date.toString()));
+                    recipes.add(recipe);
+                }
+                //Collections.reverse(recipes);
+                callback.onResponse(recipes);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
     public static void deleteRecipeByKey(String key){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference recipeRef = database.getReference("recipe").child(key);

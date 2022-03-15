@@ -1,6 +1,7 @@
 package com.example.recipeproject.UI.activities;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,7 +31,7 @@ public class HomeActivity extends AbstractActivity implements SelectListener {
     RecyclerView recyclerView;
 
     // Array list for recycler view data source
-    ArrayList<Recipe> source;
+    ArrayList<Recipe> source = new ArrayList<>();
 
     // Layout Manager
     RecyclerView.LayoutManager RecyclerViewLayoutManager;
@@ -46,7 +47,9 @@ public class HomeActivity extends AbstractActivity implements SelectListener {
     TextView textView;
 
     BottomNavigationView bottomNavigationView;
-
+    int pastVisibleItems, visibleItemCount, totalItemCount;
+    Boolean loading = false;
+    //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,39 +92,70 @@ public class HomeActivity extends AbstractActivity implements SelectListener {
         mActivity = HomeActivity.this;
         mContext = getApplicationContext();
         textView = findViewById(R.id.newest);
-        DataAccess.getRecipesOnChange(new FirebaseCallback() {
+        recyclerView
+                = (RecyclerView) findViewById(
+                R.id.recyclerviewNewest);
+        RecyclerViewLayoutManager
+                = new LinearLayoutManager(
+                getApplicationContext());
+        // Set LayoutManager on Recycler View
+        recyclerView.setLayoutManager(
+                RecyclerViewLayoutManager);
+        // calling constructor of adapter
+        // with source list as a parameter
+
+        adapter = new Adapter(source,mContext,mActivity,HomeActivity.this);
+        // Set Horizontal Layout Manager
+        // for Recycler view
+        HorizontalLayout
+                = new LinearLayoutManager(
+                HomeActivity.this,
+                LinearLayoutManager.VERTICAL,
+                false);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(mContext, 2);
+        recyclerView.setLayoutManager(HorizontalLayout);
+        // Set adapter on recycler view
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0)
+                {
+                    visibleItemCount = HorizontalLayout.getChildCount();
+                    totalItemCount = HorizontalLayout.getItemCount();
+                    pastVisibleItems = HorizontalLayout.findFirstVisibleItemPosition();
+
+                    if (!loading) {
+                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+                            loading = true;
+                            loadMore();
+                        }
+                    }
+                }
+            }
+        });
+        DataAccess.getRecipesByPage("",5, new FirebaseCallback() {
             @Override
             public void onResponse(ArrayList<Recipe> recipes) {
-                recyclerView
-                        = (RecyclerView) findViewById(
-                        R.id.recyclerviewNewest);
-                RecyclerViewLayoutManager
-                        = new LinearLayoutManager(
-                        getApplicationContext());
-                // Set LayoutManager on Recycler View
-                recyclerView.setLayoutManager(
-                        RecyclerViewLayoutManager);
-                // calling constructor of adapter
-                // with source list as a parameter
-
-                adapter = new Adapter(recipes,mContext,mActivity,HomeActivity.this);
-                // Set Horizontal Layout Manager
-                // for Recycler view
-                HorizontalLayout
-                        = new LinearLayoutManager(
-                        HomeActivity.this,
-                        LinearLayoutManager.HORIZONTAL,
-                        false);
-                recyclerView.setLayoutManager(HorizontalLayout);
-                // Set adapter on recycler view
-                recyclerView.setAdapter(adapter);
-
+                adapter.notifyDataSetChanged();
             }
 
 
-        });
+        }, source);
     }
 
+    public void loadMore(){
+        Recipe recipe = source.get(source.size()-1);
+        DataAccess.getRecipesByPage(recipe.getKey(), 5, new FirebaseCallback() {
+            @Override
+            public void onResponse(ArrayList<Recipe> recipes) {
+                adapter.notifyDataSetChanged();
+                loading = false;
+            }
+        }, source);
+    }
     @Override
     public void onItemClick(Recipe recipe) {
 
