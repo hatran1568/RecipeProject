@@ -14,10 +14,12 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -157,6 +159,13 @@ public class EditRecipe extends AbstractActivity {
                 newIngre.setWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics()));
                 newIngre.setId(View.generateViewId());
                 newIngre.setBackgroundResource(R.drawable.edit_text_border);
+
+
+
+                newIngre.setSingleLine(false);
+                newIngre.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                newIngre.setMaxLines(3);
+
                 ImageButton btn = new ImageButton(getApplicationContext());
                 btn.setBackgroundColor(Color.TRANSPARENT);
                 btn.setImageDrawable(getDrawable(R.drawable.ic_baseline_close_24));
@@ -166,6 +175,7 @@ public class EditRecipe extends AbstractActivity {
                 ctrlayout.addView(newIngre);
                 ctrlayout.addView(btn);
                 set.clone(ctrlayout);
+
                 set.constrainWidth(btn.getId(), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics()));
                 set.constrainHeight(btn.getId(), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()));
                 set.connect(btn.getId(), ConstraintSet.RIGHT, set.PARENT_ID, ConstraintSet.RIGHT);
@@ -196,6 +206,9 @@ public class EditRecipe extends AbstractActivity {
                 newStep.setWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics()));
                 newStep.setId(View.generateViewId());
                 newStep.setBackgroundResource(R.drawable.edit_text_border);
+                newStep.setSingleLine(false);
+                //newIngre.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                newStep.setMaxLines(5);
                 ImageButton btn = new ImageButton(getApplicationContext());
                 btn.setBackgroundColor(Color.TRANSPARENT);
                 btn.setImageDrawable(getDrawable(R.drawable.ic_baseline_close_24));
@@ -269,6 +282,7 @@ public class EditRecipe extends AbstractActivity {
                             ingredients.add(t.getText().toString());
                         }
                         String key = recipeId;
+                        recipeRef.child(key).child("ingredients").setValue(ingredients);
                         recipeRef.child(key).child("name").setValue(rename.getText().toString());
                         recipeRef.child(key).child("description").setValue(RecipeDescription.getText().toString());
                         recipeRef.child(key).child("portion").setValue(portion.getText().toString());
@@ -284,6 +298,7 @@ public class EditRecipe extends AbstractActivity {
                                 }
                             }, EditRecipe.this, URIMapping.get(R.id.RecipeImage));
                         }
+                        recipeRef.child(key).child("steps").setValue(null);
                         for (int i = 0; i < stepTextId.size(); i++) {
                             Step s = new Step();
                             int index=i;
@@ -340,6 +355,9 @@ public class EditRecipe extends AbstractActivity {
                     newIngre.setWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics()));
                     newIngre.setId(View.generateViewId());
                     newIngre.setBackgroundResource(R.drawable.edit_text_border);
+                    newIngre.setSingleLine(false);
+                    //newIngre.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    newIngre.setMaxLines(3);
                     newIngre.setText(ing);
                     newIngre.addTextChangedListener(new TextWatcher() {
                         @Override
@@ -394,6 +412,9 @@ public class EditRecipe extends AbstractActivity {
                     newStep.setId(View.generateViewId());
                     newStep.setBackgroundResource(R.drawable.edit_text_border);
                     newStep.setText(step.getText());
+                    newStep.setSingleLine(false);
+                    //newIngre.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    newStep.setMaxLines(5);
                     ImageButton btn = new ImageButton(getApplicationContext());
                     btn.setBackgroundColor(Color.TRANSPARENT);
                     btn.setImageDrawable(getDrawable(R.drawable.ic_baseline_close_24));

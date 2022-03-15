@@ -144,6 +144,9 @@ public class AddRecipeActivity extends AbstractActivity {
                 newIngre.setWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics()));
                 newIngre.setId(View.generateViewId());
                 newIngre.setBackgroundResource(R.drawable.edit_text_border);
+                newIngre.setSingleLine(false);
+                //newIngre.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                newIngre.setMaxLines(5);
                 ImageButton btn = new ImageButton(getApplicationContext());
                 btn.setBackgroundColor(Color.TRANSPARENT);
                 btn.setImageDrawable(getDrawable(R.drawable.ic_baseline_close_24));
@@ -183,6 +186,9 @@ public class AddRecipeActivity extends AbstractActivity {
                 newStep.setWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics()));
                 newStep.setId(View.generateViewId());
                 newStep.setBackgroundResource(R.drawable.edit_text_border);
+                newStep.setSingleLine(false);
+                //newIngre.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                newStep.setMaxLines(5);
                 ImageButton btn = new ImageButton(getApplicationContext());
                 btn.setBackgroundColor(Color.TRANSPARENT);
                 btn.setImageDrawable(getDrawable(R.drawable.ic_baseline_close_24));
