@@ -89,12 +89,7 @@ public class StepAdapter  extends RecyclerView.Adapter<StepAdapter.MyView> {
             set.applyTo(holder.constraintLayout);
 
             Picasso.with(mContext).load(step.getImage()).into(imageView);
-            ConstraintLayout.LayoutParams layoutParams =
-                    new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,
-                            ConstraintLayout.LayoutParams.MATCH_PARENT);
-
         }
-        //Picasso.with(mContext).load(step.getImage()).into(holder.stepImg);
     }
     @Override
     public int getItemCount()
