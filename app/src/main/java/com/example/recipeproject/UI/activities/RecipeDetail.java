@@ -141,6 +141,7 @@ public class RecipeDetail extends AbstractActivity {
                 editBtn = findViewById(R.id.editBtn);
                 deleteBtn = findViewById(R.id.deleteBtn);
                 if (!recipe.getUserID().equals(currentUserId)){
+
                     removeBtn();
                 }
                 deleteBtn.setOnClickListener(new View.OnClickListener() {
@@ -264,7 +265,7 @@ public class RecipeDetail extends AbstractActivity {
     }
 
     public void removeBtn(){
-        ConstraintLayout constraintLayout = findViewById(R.id.detail_constraint_layout);
+        ConstraintLayout constraintLayout = findViewById(R.id.mainLayout);
         constraintLayout.removeView(deleteBtn);
         constraintLayout.removeView(editBtn);
     }
