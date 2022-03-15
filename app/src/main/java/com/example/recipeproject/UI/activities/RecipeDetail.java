@@ -18,6 +18,8 @@ import android.widget.Toast;
 //import android.widget.Toolbar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -154,6 +156,7 @@ public class RecipeDetail extends AbstractActivity {
                         startActivity(intent);
                     }
                 });
+                createDurationTextView();
 
             }
         }, recipeId);
@@ -204,6 +207,18 @@ public class RecipeDetail extends AbstractActivity {
                 .setNegativeButton("Cancel", null);
         builder.create();
         builder.show();
+    }
+
+    public void createDurationTextView(){
+        int dpRatio = (int) mContext.getResources().getDisplayMetrics().density;
+        ConstraintSet set = new ConstraintSet();
+        TextView durationText = new TextView(mContext);
+        durationText.setId(View.generateViewId());
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100*dpRatio);
+        durationText.setLayoutParams(params);
+        durationText.setText("Duration");
+        ConstraintLayout constraintLayout = findViewById(R.id.detail_constraint_layout);
+        constraintLayout.addView(durationText);
     }
     }
 

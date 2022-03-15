@@ -17,6 +17,7 @@
         app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detail_constraint_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -34,8 +35,8 @@
                     android:id="@+id/detail_avatar_img2"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    tools:srcCompat="@tools:sample/avatars"
-                    android:scaleType="centerCrop"/>
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@tools:sample/avatars" />
 
             </androidx.cardview.widget.CardView>
 
@@ -43,11 +44,11 @@
                 android:id="@+id/detail_recipe_img"
                 android:layout_width="0dp"
                 android:layout_height="480dp"
+                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_food"
-                android:scaleType="centerCrop"/>
+                app:srcCompat="@drawable/ic_food" />
 
             <TextView
                 android:id="@+id/detail_recipe_name"
@@ -109,7 +110,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:background="#1B1919"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -141,16 +142,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView13" />
 
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/recycler_ingredients"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="10dp"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:layout_marginEnd="10dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/textView13" />-->
+            <!--            <androidx.recyclerview.widget.RecyclerView-->
+            <!--                android:id="@+id/recycler_ingredients"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="10dp"-->
+            <!--                android:layout_marginTop="10dp"-->
+            <!--                android:layout_marginEnd="10dp"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/textView13" />-->
 
             <View
                 android:id="@+id/separator2"
