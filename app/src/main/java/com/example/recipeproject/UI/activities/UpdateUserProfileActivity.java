@@ -1,5 +1,7 @@
 package com.example.recipeproject.UI.activities;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -8,9 +10,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,16 +30,24 @@ import com.example.recipeproject.model.User;
 import com.example.recipeproject.utils.FirestoreHelper;
 import com.example.recipeproject.utils.PermissionHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.PicassoEngine;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -46,7 +58,7 @@ public class UpdateUserProfileActivity extends AbstractActivity {
     private ImageButton btnAddPhoto;
     private EditText editTextUsername;
     private EditText editTextEmail;
-    //private EditText editTextDescription;
+    private ProgressBar progressBar;
 
     private Toolbar toolbar;
     private Uri imageUri;
@@ -68,6 +80,8 @@ public class UpdateUserProfileActivity extends AbstractActivity {
         editTextUsername = findViewById(R.id.editTextName);
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextEmail.setFocusable(false);
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
         //editTextDescription = findViewById(R.id.RecipeDescription);
 
         // set on click events for button inside toolbar
@@ -75,6 +89,7 @@ public class UpdateUserProfileActivity extends AbstractActivity {
         saveProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 updateUserProfile();
             }
         });
@@ -170,7 +185,33 @@ public class UpdateUserProfileActivity extends AbstractActivity {
                     }
                 }
             });
-            new UploadPhoto().execute();
+            /*Thread thread = new Thread(){
+                @Override
+                public void run() {
+                    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("user").child(userId);
+
+                    FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
+                        @Override
+                        public void onResponse(String url) {
+                            reference.child("image_link").setValue(url);
+                            Log.d("Firebase", "Get value of download url: "+ url);
+                        }
+                    },UpdateUserProfileActivity.this, imageUri);
+                }
+            };
+            //thread.start();
+            Thread thread1 = new Thread(){
+                @Override
+                public void run() {
+                    startActivity(new Intent(UpdateUserProfileActivity.this, ProfileActivity.class));
+                }
+            };
+            //thread1.run();
+            Executor executor = Executors.newSingleThreadExecutor();
+            executor.execute(thread);
+            executor.execute(thread1);*/
+            UploadPhoto(this, imageUri);
         } else {
             startActivity(new Intent(UpdateUserProfileActivity.this, ProfileActivity.class));
         }
@@ -209,29 +250,40 @@ public class UpdateUserProfileActivity extends AbstractActivity {
         }
     }
 
-    private class UploadPhoto extends AsyncTask<Void, Void, Void>{
+    private void UploadPhoto(Context context, Uri fileUri) {
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("user").child(userId);
+        FirebaseStorage storageRef = FirebaseStorage.getInstance();
+        StorageReference storageReference = storageRef.getReference()
+                .child(System.currentTimeMillis() + "." + getFileExtension(context, fileUri));
 
-            FirestoreHelper.uploadToStorage(new FirebaseStorageCallback() {
-                @Override
-                public void onResponse(String url) {
-                    reference.child("image_link").setValue(url);
-                    Log.d("Firebase", "Get value of download url: "+ url);
-                }
-            },UpdateUserProfileActivity.this, imageUri);
-            return null;
-        }
+        storageReference.putFile(fileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri)
+                    {
+                        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("user").child(userId);
+                        reference.child("image_link").setValue(uri.toString());
+                        Log.d("Firebase storage", "Uploaded " + fileUri + " to " + uri.toString());
+                        progressBar.setVisibility(View.INVISIBLE);
+                        startActivity(new Intent(UpdateUserProfileActivity.this, ProfileActivity.class));
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context, "Upload failed", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
-        @Override
-        protected void onPostExecute(Void unused) {
-            super.onPostExecute(unused);
-            startActivity(new Intent(UpdateUserProfileActivity.this, ProfileActivity.class));
-        }
-
+    private static String getFileExtension(Context context, Uri uri) {
+        ContentResolver contentResolver = context.getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 }
 
