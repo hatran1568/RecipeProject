@@ -38,7 +38,7 @@
         android:layout_marginTop="44dp"
         android:background="#00FFFFFF"
         android:clipToPadding="false"
-        android:paddingBottom="210dp"
+        android:paddingBottom="100dp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.484"

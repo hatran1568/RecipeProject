@@ -318,63 +318,6 @@ public class DataAccess {
         });
     }
 
-    public static void getRecipesSearch(FirebaseCallback callback, String searchKey) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("recipe");
-        ArrayList<Recipe> recipes = new ArrayList<>();
-        myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-
-
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DataSnapshot postSnapshot = task.getResult();
-                    for (DataSnapshot snapshot : postSnapshot.getChildren()) {
-                        Recipe recipe = new Recipe();
-                        String description = snapshot.child("description").getValue().toString();
-                        recipe.setDescription(description);
-                        String duration = snapshot.child("duration").getValue().toString();
-                        recipe.setDuration(duration);
-                        String portion = snapshot.child("portion").getValue().toString();
-                        recipe.setPortion(portion);
-                        String thumbnail = snapshot.child("thumbnail").getValue().toString();
-                        recipe.setThumbnail(thumbnail);
-                        String userId = snapshot.child("userId").getValue().toString();
-                        recipe.setUserID(userId);
-                        int id = Integer.parseInt(snapshot.child("id").getValue().toString());
-                        recipe.setId(id);
-                        String key = snapshot.getKey();
-                        recipe.setKey(key);
-
-                        ArrayList<Step> steps = new ArrayList<>();
-                        for (DataSnapshot dataSnapshot : snapshot.child("steps").getChildren()
-                        ) {
-                            Step step = dataSnapshot.getValue(Step.class);
-                            steps.add(step);
-                        }
-                        recipe.setSteps(steps);
-
-                        ArrayList<String> ingredients = new ArrayList<>();
-                        for (DataSnapshot dataSnapshot : snapshot.child("ingredients").getChildren()
-                        ) {
-                            ingredients.add(dataSnapshot.getValue().toString());
-                        }
-                        recipe.setIngredients(ingredients);
-                        Date date = Date.valueOf(snapshot.child("date").getValue().toString());
-                        recipe.setDate(date);
-                        if (recipe.getName().startsWith(searchKey))
-                            recipes.add(recipe);
-
-                    }
-                    callback.onResponse(recipes);
-
-                } else {
-
-                }
-            }
-        });
-    }
-
     public static void getFavoritesRecipe(FirebaseCallback callback, String userId) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("user").child(userId).child("favorites");
