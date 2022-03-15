@@ -116,6 +116,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
         holder.favBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                list.clear();
                 favChecker = true;
                 favRef.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -125,7 +126,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
                                 favRef.child(finalCurrentUserId).child("favorites").child(recipeKey).removeValue();
                                 favChecker = false;
                             }}
-                        mContext.startActivity(new Intent(mContext, ProfileActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                        //mContext.startActivity(new Intent(mContext, ProfileActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
 
                     }
 
@@ -134,7 +135,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
 
                     }
                 });
-                notifyDataSetChanged();
+                //notifyDataSetChanged();
             }
         });
 
