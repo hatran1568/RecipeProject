@@ -29,7 +29,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
+public class HomeAdapter  extends RecyclerView.Adapter<HomeAdapter.MyView> {
     private ArrayList<Recipe> list;
     private Context mContext;
     private Activity mActivity;
@@ -87,7 +87,7 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
             });
         }
     }
-    public Adapter( ArrayList<Recipe> horizontalist,Context mContext,Activity mActivity,SelectListener listener){
+    public HomeAdapter( ArrayList<Recipe> horizontalist,Context mContext,Activity mActivity,SelectListener listener){
         this.mContext = mContext;
         this.mActivity = mActivity;
         this.list = horizontalist;
@@ -103,7 +103,7 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
         View itemView
                 = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.layout_cardview_double,
+                .inflate(R.layout.layout_cardview,
                         parent,
                         false);
 
