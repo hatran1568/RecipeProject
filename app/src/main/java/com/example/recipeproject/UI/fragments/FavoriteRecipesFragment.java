@@ -120,7 +120,9 @@ public class FavoriteRecipesFragment extends Fragment implements SwipeRefreshLay
                     DataAccess.getRecipeById(new getRecipeCallback() {
                         @Override
                         public void onResponse(Recipe recipe) {
-                            favoriteRecipes.add(recipe);
+                            if (recipe!=null){
+                                favoriteRecipes.add(recipe);
+                            }
                         }
                     }, id);
                 }
