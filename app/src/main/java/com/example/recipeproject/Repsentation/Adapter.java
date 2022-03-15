@@ -57,12 +57,12 @@ public class Adapter  extends RecyclerView.Adapter<Adapter.MyView> {
            recipeDescription = view.findViewById(R.id.description1);
            card = view.findViewById(R.id.card1);
            avatar = view.findViewById(R.id.avatar);
-           favBtn = view.findViewById(R.id.favBtn);
+           favBtn = view.findViewById(R.id.favBtnProfile);
         }
 
         //Check or uncheck the Favorite button
         public void favoriteChecker(Recipe recipe) {
-            favBtn = itemView.findViewById(R.id.favBtn);
+            favBtn = itemView.findViewById(R.id.favBtnProfile);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             String currentUserId = null;
             if (user != null){
