@@ -18,6 +18,7 @@ import com.example.recipeproject.InterfaceGetData.FirebaseCallback;
 import com.example.recipeproject.NotLogInError;
 import com.example.recipeproject.R;
 import com.example.recipeproject.Repsentation.Adapter;
+import com.example.recipeproject.Repsentation.HomeAdapter;
 import com.example.recipeproject.listener.SelectListener;
 import com.example.recipeproject.model.Recipe;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,7 +38,7 @@ public class HomeActivity extends AbstractActivity implements SelectListener {
     RecyclerView.LayoutManager RecyclerViewLayoutManager;
 
     // adapter class object
-    Adapter adapter;
+    HomeAdapter adapter;
 
     // Linear Layout Manager
     LinearLayoutManager HorizontalLayout;
@@ -104,7 +105,7 @@ public class HomeActivity extends AbstractActivity implements SelectListener {
         // calling constructor of adapter
         // with source list as a parameter
 
-        adapter = new Adapter(source,mContext,mActivity,HomeActivity.this);
+        adapter = new HomeAdapter(source,mContext,mActivity,HomeActivity.this);
         // Set Horizontal Layout Manager
         // for Recycler view
         HorizontalLayout
