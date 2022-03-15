@@ -140,8 +140,7 @@ public class RecipeDetail extends AbstractActivity {
                 editBtn = findViewById(R.id.editBtn);
                 deleteBtn = findViewById(R.id.deleteBtn);
                 if (!recipe.getUserID().equals(currentUserId)){
-                    editBtn.setVisibility(View.INVISIBLE);
-                    deleteBtn.setVisibility(View.INVISIBLE);
+                    removeBtn();
                 }
                 deleteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -260,6 +259,12 @@ public class RecipeDetail extends AbstractActivity {
         constraintLayout.removeView(portion);
         set.connect(listIngredients.getId(), ConstraintSet.TOP, R.id.detail_text_ingredient, ConstraintSet.BOTTOM, (int) (12*dpRatio));
         set.applyTo(constraintLayout);
+    }
+
+    public void removeBtn(){
+        ConstraintLayout constraintLayout = findViewById(R.id.detail_constraint_layout);
+        constraintLayout.removeView(deleteBtn);
+        constraintLayout.removeView(editBtn);
     }
     }
 
