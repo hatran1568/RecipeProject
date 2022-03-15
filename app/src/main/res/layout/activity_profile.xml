@@ -11,7 +11,7 @@
         android:id="@+id/bottomNavigation"
         android:layout_width="352dp"
         android:layout_height="59dp"
-        android:layout_margin="30dp"
+        android:layout_margin="10dp"
 
         android:background="@drawable/rounded_corner"
         android:elevation="3dp"
@@ -19,12 +19,12 @@
         app:itemIconSize="30dp"
         app:itemIconTint="@drawable/item_selector"
         app:itemRippleColor="@android:color/transparent"
+        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:labelVisibilityMode="unlabeled"
         app:menu="@menu/bottom_navigation_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>

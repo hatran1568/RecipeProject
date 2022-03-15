@@ -39,7 +39,7 @@
         android:id="@+id/bottomNavigation"
         android:layout_width="352dp"
         android:layout_height="59dp"
-        android:layout_margin="30dp"
+        android:layout_margin="10dp"
 
         android:background="@drawable/rounded_corner"
         android:elevation="3dp"
