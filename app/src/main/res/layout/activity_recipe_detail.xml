@@ -41,7 +41,7 @@
             <ImageView
                 android:id="@+id/detail_recipe_img"
                 android:layout_width="0dp"
-                android:layout_height="480dp"
+                android:layout_height="420dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
