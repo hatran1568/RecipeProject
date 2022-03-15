@@ -32,7 +32,6 @@ import java.util.ArrayList;
 public class MyRecipeFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private ArrayList<Recipe> favoriteRecipes = new ArrayList<>();
     private SearchView searchView;
 
     // TODO: Rename parameter arguments, choose names that match

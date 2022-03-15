@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import com.example.recipeproject.DataAccess.DataAccess;
 import com.example.recipeproject.InterfaceGetData.getUserCallback;
 import com.example.recipeproject.R;
+import com.example.recipeproject.UI.activities.ProfileActivity;
 import com.example.recipeproject.listener.SelectListener;
 import com.example.recipeproject.model.Recipe;
 import com.example.recipeproject.model.User;
@@ -29,29 +31,28 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class FavoriteRecipeAdapter  extends RecyclerView.Adapter<FavoriteRecipeAdapter.MyView> {
+public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAdapter.MyView> {
     private ArrayList<Recipe> list;
     private Context mContext;
     private Activity mActivity;
     private SelectListener listener;
     DatabaseReference databaseRef, favRef, favListRef;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    Boolean favChecker = false;
-    public class MyView extends  RecyclerView.ViewHolder {
+
+    public class MyView extends RecyclerView.ViewHolder {
         TextView userName;
         TextView recipeName;
         ImageView recipeImg;
         TextView recipeDescription;
         CardView card;
-        Context context;
         ImageView avatar;
 
         ImageView favBtn;
 
 
-        public  MyView(View view){
+        public MyView(View view) {
             super(view);
-            userName= view.findViewById(R.id.userName1);
+            userName = view.findViewById(R.id.userName1);
             recipeName = view.findViewById(R.id.recipeName1);
             recipeImg = view.findViewById(R.id.recipeImg1);
             recipeDescription = view.findViewById(R.id.description1);
@@ -63,44 +64,22 @@ public class FavoriteRecipeAdapter  extends RecyclerView.Adapter<FavoriteRecipeA
         //Check or uncheck the Favorite button
         public void favoriteChecker(Recipe recipe) {
             favBtn = itemView.findViewById(R.id.favBtn);
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            String currentUserId = null;
-            if (user != null){
-                currentUserId = user.getUid();
-            }
-            String finalCurrentUserId = currentUserId;
-            final String recipeKey = recipe.getKey();
-
-            /*favRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.child(finalCurrentUserId).child("favorites").hasChild(recipeKey)){
-                        favBtn.setImageResource(R.drawable.favorite_on);
-                    }
-                    else favBtn.setImageResource(R.drawable.favorite_off);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });*/
             favBtn.setImageResource(R.drawable.favorite_on);
 
         }
     }
-    public FavoriteRecipeAdapter( ArrayList<Recipe> horizontalist,Context mContext,Activity mActivity,SelectListener listener){
+
+    public FavoriteRecipeAdapter(ArrayList<Recipe> horizontalist, Context mContext, Activity mActivity, SelectListener listener) {
         this.mContext = mContext;
         this.mActivity = mActivity;
         this.list = horizontalist;
-        this.listener=listener;
+        this.listener = listener;
+        setHasStableIds(true);
     }
+
     @Override
     public MyView onCreateViewHolder(@NonNull ViewGroup parent,
-                                     int viewType)
-    {
-
-
+                                     int viewType) {
         // Inflate item.xml using LayoutInflator
         View itemView
                 = LayoutInflater
@@ -113,16 +92,13 @@ public class FavoriteRecipeAdapter  extends RecyclerView.Adapter<FavoriteRecipeA
         favRef = database.getReference("user");
         return new MyView(itemView);
     }
+
     @Override
     public void onBindViewHolder(final MyView holder,
-                                 int position)
-    {
+                                 int position) {
+
         //Get Logged in user.
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String currentUserId = null;
-        if (user != null){
-            currentUserId = user.getUid();
-        }
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         Recipe recipe = list.get(position);
         final String recipeKey = recipe.getKey();
@@ -134,38 +110,30 @@ public class FavoriteRecipeAdapter  extends RecyclerView.Adapter<FavoriteRecipeA
                 holder.userName.setText(user.getName());
                 Picasso.with(mContext).load(user.getImage_link()).into(holder.avatar);
             }
-        },recipe.getUserID());
+        }, recipe.getUserID());
 
-        if (user != null) {
-            holder.favoriteChecker(recipe);
-            String finalCurrentUserId = currentUserId;
-            holder.favBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    favChecker = true;
-                    favRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(favChecker.equals(true)){
-                                if(snapshot.child(finalCurrentUserId).child("favorites").hasChild(recipeKey)){
-                                    favRef.child(finalCurrentUserId).child("favorites").child(recipeKey).removeValue();
-                                    favChecker = false;
-                                } else {
-                                    favRef.child(finalCurrentUserId).child("favorites").child(recipeKey).setValue(true);
-                                    favChecker = false;
-                                }
-                            }
+        holder.favoriteChecker(recipe);
+        String finalCurrentUserId = currentUserId;
+        holder.favBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                favRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        favRef.child(finalCurrentUserId).child("favorites").child(recipeKey).removeValue();
+                        mContext.startActivity(new Intent(mContext, ProfileActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
 
-                        }
+                    }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
-                    });
-                }
-            });
-        }
+                    }
+                });
+                notifyDataSetChanged();
+            }
+        });
+
 
         holder.recipeDescription.setText(recipe.getDescription());
         if (list.get(position).getThumbnail() != null && !list.get(position).getThumbnail().isEmpty())
@@ -177,9 +145,19 @@ public class FavoriteRecipeAdapter  extends RecyclerView.Adapter<FavoriteRecipeA
             }
         });
     }
+
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return list.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 }
