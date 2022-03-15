@@ -282,6 +282,7 @@ public class EditRecipe extends AbstractActivity {
                             ingredients.add(t.getText().toString());
                         }
                         String key = recipeId;
+                        recipeRef.child(key).child("ingredients").setValue(ingredients);
                         recipeRef.child(key).child("name").setValue(rename.getText().toString());
                         recipeRef.child(key).child("description").setValue(RecipeDescription.getText().toString());
                         recipeRef.child(key).child("portion").setValue(portion.getText().toString());
@@ -297,6 +298,7 @@ public class EditRecipe extends AbstractActivity {
                                 }
                             }, EditRecipe.this, URIMapping.get(R.id.RecipeImage));
                         }
+                        recipeRef.child(key).child("steps").setValue(null);
                         for (int i = 0; i < stepTextId.size(); i++) {
                             Step s = new Step();
                             int index=i;
