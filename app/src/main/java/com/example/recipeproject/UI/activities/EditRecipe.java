@@ -337,7 +337,7 @@ public class EditRecipe extends AbstractActivity {
         DataAccess.getRecipeById(new getRecipeCallback() {
             @Override
             public void onResponse(Recipe recipe) {
-                if(recipe.getThumbnail()!=null){
+                if(recipe.getThumbnail()!= null && !recipe.getThumbnail().isEmpty()){
                     Picasso.with(EditRecipe.this).load(recipe.getThumbnail()).into(RecipeThumbnail);
                 }
 
