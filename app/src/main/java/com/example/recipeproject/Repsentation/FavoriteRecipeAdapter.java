@@ -21,7 +21,6 @@ import com.example.recipeproject.listener.SelectListener;
 import com.example.recipeproject.model.Recipe;
 import com.example.recipeproject.model.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -58,12 +57,12 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
             recipeDescription = view.findViewById(R.id.description1);
             card = view.findViewById(R.id.card1);
             avatar = view.findViewById(R.id.avatar);
-            favBtn = view.findViewById(R.id.favBtn);
+            favBtn = view.findViewById(R.id.favBtnProfile);
         }
 
         //Check or uncheck the Favorite button
         public void favoriteChecker(Recipe recipe) {
-            favBtn = itemView.findViewById(R.id.favBtn);
+            favBtn = itemView.findViewById(R.id.favBtnProfile);
             favBtn.setImageResource(R.drawable.favorite_on);
 
         }
@@ -84,7 +83,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
         View itemView
                 = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.layout_cardview_double,
+                .inflate(R.layout.layout_favorite_recipe,
                         parent,
                         false);
 
@@ -121,7 +120,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         favRef.child(finalCurrentUserId).child("favorites").child(recipeKey).removeValue();
-                        mContext.startActivity(new Intent(mContext, ProfileActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                        mActivity.startActivity(new Intent(mActivity, ProfileActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
 
                     }
 
