@@ -211,7 +211,8 @@ public class RecipeDetail extends AbstractActivity {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
                         DataAccess.deleteRecipeByKey(recipeId);
-                        finish();
+                        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                        startActivity(intent);
                     }})
                 .setNegativeButton("Cancel", null);
         builder.create();
