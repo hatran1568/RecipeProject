@@ -28,6 +28,7 @@
         android:background="@drawable/rounded_corner_grey"
         android:iconifiedByDefault="false"
         android:queryHint="Search by recipe or ingredients"
+        android:queryBackground="@android:color/transparent"
         android:submitBackground="@drawable/rounded_corner_grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.515"

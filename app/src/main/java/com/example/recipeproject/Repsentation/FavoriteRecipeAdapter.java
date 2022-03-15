@@ -37,6 +37,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
     private Activity mActivity;
     private SelectListener listener;
     DatabaseReference databaseRef, favRef, favListRef;
+    Boolean favChecker = false;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     public class MyView extends RecyclerView.ViewHolder {
@@ -46,9 +47,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
         TextView recipeDescription;
         CardView card;
         ImageView avatar;
-
         ImageView favBtn;
-
 
         public MyView(View view) {
             super(view);
@@ -97,6 +96,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
     public void onBindViewHolder(final MyView holder,
                                  int position) {
 
+        final Boolean[] checker = new Boolean[1];
         //Get Logged in user.
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -117,10 +117,15 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<FavoriteRecipeAd
         holder.favBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                favChecker = true;
                 favRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        favRef.child(finalCurrentUserId).child("favorites").child(recipeKey).removeValue();
+                        if(favChecker.equals(true)){
+                            if(snapshot.child(finalCurrentUserId).child("favorites").hasChild(recipeKey)) {
+                                favRef.child(finalCurrentUserId).child("favorites").child(recipeKey).removeValue();
+                                favChecker = false;
+                            }}
                         mContext.startActivity(new Intent(mContext, ProfileActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
 
                     }
