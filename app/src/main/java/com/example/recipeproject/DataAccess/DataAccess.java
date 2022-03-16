@@ -1,14 +1,11 @@
 package com.example.recipeproject.DataAccess;
 
-import android.graphics.Path;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.recipeproject.InterfaceGetData.FirebaseCallback;
 import com.example.recipeproject.InterfaceGetData.getRecipeCallback;
 import com.example.recipeproject.InterfaceGetData.getUserCallback;
-import com.example.recipeproject.Repsentation.Adapter;
 import com.example.recipeproject.model.Recipe;
 import com.example.recipeproject.model.Step;
 import com.example.recipeproject.model.User;
@@ -19,12 +16,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class DataAccess {
 
@@ -48,6 +43,8 @@ public class DataAccess {
                     recipe.setPortion(portion);
                     String thumbnail = snapshot.hasChild("thumbnail") ? snapshot.child("thumbnail").getValue().toString() : "";
                     recipe.setThumbnail(thumbnail);
+                    long reverseTimestamp = snapshot.hasChild("reverseTimestamp") ? (long) snapshot.child("reverseTimestamp").getValue() : 0;
+                    recipe.setReverseTimestamp(reverseTimestamp);
                     Object userId = snapshot.child("userId").getValue();
                     if (userId == null)
                         userId = snapshot.child("userID").getValue();
@@ -91,10 +88,11 @@ public class DataAccess {
             }
         });
     }
-    public static void getRecipesByPage(String lastValue, int size, FirebaseCallback callback, ArrayList<Recipe> recipes){
+
+    public static void getRecipesByPage(long lastValue, int size, FirebaseCallback callback, ArrayList<Recipe> recipes){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("recipe");
-        myRef.orderByKey().startAfter(lastValue).limitToFirst(size).addValueEventListener(new ValueEventListener() {
+        myRef.orderByChild("reverseTimestamp").startAfter(lastValue).limitToFirst(size).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot postSnapshot) {
                 for (DataSnapshot snapshot : postSnapshot.getChildren()) {
@@ -138,6 +136,8 @@ public class DataAccess {
                     if (date == null)
                         date = snapshot.child("strdate").getValue();
                     recipe.setDate(Date.valueOf(date.toString()));
+                    long reverseTimestamp = snapshot.hasChild("reverseTimestamp") ? (long) snapshot.child("reverseTimestamp").getValue() : 0;
+                    recipe.setReverseTimestamp(reverseTimestamp);
                     recipes.add(recipe);
                 }
                 //Collections.reverse(recipes);

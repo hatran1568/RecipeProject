@@ -34,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -326,10 +327,10 @@ public class AddRecipeActivity extends AbstractActivity {
                         recipe.setSteps(steps);
 
                         recipe.setStrdate(dtf.format(LocalDate.now()));
-
+                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                        recipe.setReverseTimestamp(-1*timestamp.getTime());
                         recipeRef.child(key).setValue(recipe);
-
-                        recipeRef.child(key).child("date").setValue(strDate);
+                        recipeRef.child(key).child("date").setValue(dtf.format(LocalDate.now()));
                     }
                 };
                 thread.run();

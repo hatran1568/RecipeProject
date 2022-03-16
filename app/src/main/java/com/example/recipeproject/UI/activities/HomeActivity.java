@@ -137,7 +137,7 @@ public class HomeActivity extends AbstractActivity implements SelectListener {
                 }
             }
         });
-        DataAccess.getRecipesByPage("",5, new FirebaseCallback() {
+        DataAccess.getRecipesByPage(-2147483647000L,5, new FirebaseCallback() {
             @Override
             public void onResponse(ArrayList<Recipe> recipes) {
                 adapter.notifyDataSetChanged();
@@ -149,7 +149,7 @@ public class HomeActivity extends AbstractActivity implements SelectListener {
 
     public void loadMore(){
         Recipe recipe = source.get(source.size()-1);
-        DataAccess.getRecipesByPage(recipe.getKey(), 5, new FirebaseCallback() {
+        DataAccess.getRecipesByPage(recipe.getReverseTimestamp(), 5, new FirebaseCallback() {
             @Override
             public void onResponse(ArrayList<Recipe> recipes) {
                 adapter.notifyDataSetChanged();

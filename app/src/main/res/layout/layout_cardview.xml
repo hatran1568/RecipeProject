@@ -117,7 +117,7 @@
                     android:layout_marginEnd="5dp"
                     android:background="#00FFFFFF"
                     android:fontFamily="sans-serif"
-                    android:maxLines="3"
+                    android:maxLines="2"
                     android:text="TextView"
                     android:textColor="#B7000000"
                     app:layout_constraintEnd_toEndOf="parent"

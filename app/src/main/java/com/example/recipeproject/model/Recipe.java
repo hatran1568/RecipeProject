@@ -11,6 +11,15 @@ public class Recipe {
     public void setStrdate(String strdate) {
         this.strdate = strdate;
     }
+    private long reverseTimestamp;
+
+    public long getReverseTimestamp() {
+        return reverseTimestamp;
+    }
+
+    public void setReverseTimestamp(long reverseTimestamp) {
+        this.reverseTimestamp = reverseTimestamp;
+    }
 
     private  String strdate;
     private String description;
