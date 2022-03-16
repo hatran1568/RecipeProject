@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.AnyRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -174,9 +175,9 @@ public class UpdateUserProfileActivity extends AbstractActivity {
             reference.child("image_link").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if (task.isSuccessful()){
+                    if (task.isSuccessful() && task.getResult().exists()){
                         String iUrl = String.valueOf(task.getResult().getValue());
-                        if (iUrl != null){
+                        if (iUrl != null && !iUrl.isEmpty()){
                             Log.d("firebase", iUrl);
                             FirestoreHelper.deleteFile(String.valueOf(task.getResult().getValue()));
                         }
