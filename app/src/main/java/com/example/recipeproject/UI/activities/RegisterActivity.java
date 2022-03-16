@@ -1,6 +1,9 @@
 package com.example.recipeproject.UI.activities;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -9,10 +12,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.AnyRes;
 import androidx.annotation.NonNull;
 
+import com.example.recipeproject.InterfaceGetData.FirebaseStorageCallback;
 import com.example.recipeproject.R;
 import com.example.recipeproject.model.User;
+import com.example.recipeproject.utils.FirestoreHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -88,7 +94,6 @@ public class RegisterActivity extends AbstractActivity {
                             user.setEmail(email);
                             user.setName(name);
                             user.setPassword(password);
-
                             // Add user to database with node is uid
                             FirebaseDatabase.getInstance().getReference("user")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -116,5 +121,13 @@ public class RegisterActivity extends AbstractActivity {
                 });
             }
         });
+    }
+    public static  Uri getUriToDrawable(@NonNull Context context,
+                                        @AnyRes int drawableId) {
+        Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
+                + "://" + context.getResources().getResourcePackageName(drawableId)
+                + '/' + context.getResources().getResourceTypeName(drawableId)
+                + '/' + context.getResources().getResourceEntryName(drawableId) );
+        return imageUri;
     }
 }
