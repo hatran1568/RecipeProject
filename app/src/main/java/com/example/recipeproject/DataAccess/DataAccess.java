@@ -160,7 +160,7 @@ public class DataAccess {
         Recipe recipe = new Recipe();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference recipeRef = database.getReference("recipe").child(id);
-        recipeRef.addValueEventListener(new ValueEventListener() {
+        recipeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if(snapshot.exists()){
